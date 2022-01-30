@@ -1,0 +1,1 @@
+<a href={{ $delete }} title="Удалить"><img src="{{asset('storage/delete_icon.png')}}"  alt="Удалить" class="w-4 h-4"></a>

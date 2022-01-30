@@ -1,0 +1,1 @@
+<a href={{ $deld }} title="Доставлено"><img src="{{asset('storage/dostavlen.png')}}"  alt="Доставлен" class="w-4 h-4"></a>

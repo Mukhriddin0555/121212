@@ -1,0 +1,1 @@
+<a href={{ $more }} title="Подробнее"><img src="{{asset('storage/podrobnee.png')}}"  alt="Подробнее" class="w-4 h-4"></a>

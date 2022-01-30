@@ -1,0 +1,1 @@
+<img src="{{asset('storage/logonpt1.PNG')}}"  alt="здесь есть фото" {{ $attributes }}>
