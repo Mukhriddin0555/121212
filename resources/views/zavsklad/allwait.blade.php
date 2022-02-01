@@ -136,6 +136,8 @@
             <input type="button" onclick='deSelect()' value="отменить все" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400">
             <button form="selectedopt" formaction="{{ route('selecteddelivered')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Доставлен</button>
             <button form="selectedopt"  formaction="{{ route('selecteddelete')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Удалить</button>
+            <button class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 "><a href="{{ route('allWaitExport')}}">Импорт в экзель</a></button>
+            
             <br>
         </div>
         

@@ -81,6 +81,8 @@ Route::middleware(['branchmanager','auth'])->group(function(){
         return view('zavsklad');
     })->middleware(['auth'])->name('zavsklad');
 
+    Route::get('/waitings/all/export',[branchController::class, 'allWaitExport'])->name('allWaitExport');
+
     Route::get('/waiting/{column}/{sort}',[branchController::class, 'allWait'])->name('allWait'); // шу ни узида янги ожидания кушилади
     Route::get('/waitings/{id}/get',[branchController::class, 'oneWait'])->name('oneWait');
 

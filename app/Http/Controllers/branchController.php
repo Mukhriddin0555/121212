@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\WaitExport;
 use DateTime;
 use App\Models\status;
 use App\Models\waiting;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\resseptionOrders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class branchController extends Controller
 {
@@ -154,7 +156,7 @@ class branchController extends Controller
         ->select('resseption_orders.*', 'spareparts.name as sapname','statuses.name as statusname')
         ->orderBy($column, $sort)
         ->get();
-        
+        //dd($wait);
         return view('zavsklad.saleswait', ['data' => $wait]);
     }
     public function oneWaitOrder(Request $req, $id)
@@ -312,5 +314,15 @@ class branchController extends Controller
             $onewait->delete();
         }
         return redirect()->route('allWait', ['crm_id', 'asc']);
+    }
+
+    public function allWaitExport(){
+        $user = Auth::User()->id;
+        $sklad_id = DB::table('warehouses')
+        ->where('user_id', $user)
+        ->get();
+        $sklad_id = $sklad_id[0]->Kod;
+        //dd($sklad_id);
+        return Excel::download(new WaitExport, $sklad_id.'.xlsx');
     }
 }
