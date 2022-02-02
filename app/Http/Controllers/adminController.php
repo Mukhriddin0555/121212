@@ -41,13 +41,20 @@ class adminController extends Controller
     public function allUsers($column, $sort)
     {
         //$users = User::all();
-        $users = DB::table('users')
+        /*$users = DB::table('users')
         ->join('roles', 'users.role_id', '=', 'roles.id')
         ->orderBy($column, $sort)
         ->select('users.*', 'roles.role')
         ->get();
-        return view('user.allUser', ['data' => $users]);
-        //dd($users);
+        return view('user.allUser', ['data' => $users]);*/
+        $data1 = HowToModel::where('zavod_sn', 'LIKE', "%bjca%")->get();
+        if(empty($data1[0])){
+           return 'false';
+        }else{
+            return 'true';
+        }
+            
+        dd($data1);
         
     }
     public function oneUser($id)
