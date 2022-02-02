@@ -13,7 +13,9 @@ use App\Models\warehouse;
 use App\Imports\SpareImport;
 use Illuminate\Http\Request;
 use App\Exports\SparePartExport;
+use App\Imports\HowToModelImport;
 use App\Imports\SparePartImport;
+use App\Models\HowToModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -400,6 +402,14 @@ class adminController extends Controller
             $result = Excel::import(new SpareImport, $file);
             return redirect()->route('sparePart');
         }
+        return redirect()->route('sparePart');
+    }
+
+    public function modelImport(Request $req) 
+    {
+        $file = $req->file('modelimport');
+        $result = Excel::import(new HowToModelImport, $file);
+        
         return redirect()->route('sparePart');
     }
 

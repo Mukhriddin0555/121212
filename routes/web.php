@@ -6,6 +6,7 @@ use App\Http\Controllers\branchController;
 use App\Http\Controllers\FilialManagerController;
 use App\Http\Controllers\resseptionController;
 use App\Http\Controllers\sparepartmanagerController;
+use App\Http\Controllers\telegramController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ use App\Http\Controllers\sparepartmanagerController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/how_to_model_artel_bot',[telegramController::class, 'howToModel']);
+
 //---------------------------------------------------------------------------------------------------
 Route::middleware(['director','auth'])->group(function(){
     //Роль директора
@@ -161,6 +164,7 @@ Route::middleware(['admin','auth'])->group(function(){
     Route::get('/sparepart/delete/{sap}',[adminController::class, 'deleteSparePart'])->name('deleteSparePart');    
     Route::get('/allsparepart/export',[adminController::class, 'allExport'])->name('allExport');
     Route::post('/sparepart/new',[adminController::class, 'addsparePart'])->name('addsparePart');
+    Route::post('/sparepart/modelImport',[adminController::class, 'modelImport'])->name('modelImport');
 
 //----------------------------------------------------------------------------------------------------
     //жавобларни кушиш/учириш

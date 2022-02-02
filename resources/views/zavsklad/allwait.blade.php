@@ -77,31 +77,31 @@
                         <th class="p-1 pr-3"></th>
                         @foreach ($data1 as $item)
                             <tr>
-                                <td class="p-1 pr-3">
+                                <td class="p-1 pr-3 text-xs">
                                     {{$loop->index+1}}
                                 </td>
                                 <td class="p-1 pr-3 text-xs">
                                     {{$item->data}}
                                 </td>
-                                <td class="p-1 pr-3">
+                                <td class="p-1 pr-3 text-xs">
                                     {{$item->crm_id}}
                                 </td>
-                                <td class="p-1 pr-3">
+                                <td class="p-1 pr-3 text-xs">
                                     {{$item->sap_kod}}
                                 </td>
                                 <td class="p-1 pr-3 text-xs">
                                     {{$item->sapname}}
                                 </td>
-                                <td class="p-1 pr-3">
+                                <td class="p-1 pr-3 text-xs">
                                     {{$item->how}}
                                 </td>
-                                <td class="p-1 pr-3">
+                                <td class="p-1 pr-3 text-xs">
                                     {{$item->order}}
                                 </td>
                                 <form action="{{ route('statusOneWait', $item->id)}}" method="GET">
-                                <td class="p-1">
+                                <td class="p-1 text-xs">
                                     
-                                        <select name="newstatus" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                                        <select name="newstatus" class="block bg-gray-200 border border-gray-200 text-gray-700 p-1 pr-3 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-xs" id="grid-state">
                                             <option value="{{ $item->statusid}}" selected="selected">{{ $item->statusname}}</option>
                                             @foreach ($data2 as $status)
                                                 <option value="{{ $status->id}}" class="text-xs">{{ $status->name}}</option>
@@ -120,7 +120,7 @@
                                 <th class="p-1 pr-1">
                                     <x-link.more more="{{ route('oneWait', $item->id)}}" />
                                 </th>
-                                <th class="p-1 pr-1">
+                                <th class="p-1 pr-1 text-xs">
                                     <input type="checkbox" name="selected[]" form="selectedopt" value="{{$item->id}}">
                                 </th>
                             </tr>
