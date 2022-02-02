@@ -17,11 +17,11 @@ class telegramController extends Controller
         if(strlen($text) >= 4){
             $search =  '%'.$text.'%'; //str_replace("*", "%", $search1);
             $data1 = HowToModel::where('zavod_sn', 'LIKE', "$search")->get();
-            if(!empty($data1)){
-                $data = (string)view('telegramsupport.howtomodel',['models' => $data1]);
-                $telegram->sendMessage($chat_id, $data);
-            }else{
+            if(empty($data1[0])){
                 $data = 'В базе данных не найдено совподений с <'.$text.'>. проверьте и попробуйте заново';
+                $telegram->sendMessage($chat_id, $data);
+            }else{                
+                $data = (string)view('telegramsupport.howtomodel',['models' => $data1]);
                 $telegram->sendMessage($chat_id, $data);
             }
             
