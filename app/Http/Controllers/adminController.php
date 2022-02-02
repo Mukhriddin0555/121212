@@ -48,6 +48,7 @@ class adminController extends Controller
         ->get();
         return view('user.allUser', ['data' => $users]);
         //dd($users);
+        
     }
     public function oneUser($id)
     {

@@ -9,7 +9,7 @@ class Telegram {
 
     protected $http;
     protected $bot;
-    const url = 'https://api.tlgr.org/bot';
+    const url = 'https://api.telegram.org/bot';
 
     public function __construct(Http $http, $bot)
     {
