@@ -22,7 +22,7 @@ use App\Http\Controllers\telegramController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/how_to_model_artel_bot',[telegramController::class, 'howToModel']);
+Route::post('/how_to_model_artel_bot',[telegramController::class, 'howToModel']);
 
 //---------------------------------------------------------------------------------------------------
 Route::middleware(['director','auth'])->group(function(){
