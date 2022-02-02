@@ -13,6 +13,7 @@ class telegramController extends Controller
     
     public function howToModel(Request $request, Telegram $telegram)
     {
-        Log::debug($request->all());
+        $chat_id = $request['message']['chat']['id'];
+        Log::debug($chat_id);
     }
 }
