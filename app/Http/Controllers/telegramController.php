@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Telegram;
+use App\Models\HowToModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -14,6 +15,11 @@ class telegramController extends Controller
     public function howToModel(Request $request, Telegram $telegram)
     {
         $chat_id = $request['message']['chat']['id'];
-        Log::debug($chat_id);
+        $text = $request['message']['text'];
+        $search =  '%'.$text.'%'; //str_replace("*", "%", $search1);
+        $data1 = HowToModel::where('zavod_sn', 'LIKE', "$search")->get();
+        $data = (string)view('telegramsupport.howtomodel',['models' => $data1]);
+        $telegram->sendMessage($chat_id, $data);
+        //Log::debug($chat_id);
     }
 }
