@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Exports\SparePartExport;
 use App\Imports\HowToModelImport;
 use App\Imports\SparePartImport;
+use App\Models\Counter;
 use App\Models\HowToModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -40,22 +41,14 @@ class adminController extends Controller
     //Обработка пользователей
     public function allUsers($column, $sort)
     {
-        //$users = User::all();
-        /*$users = DB::table('users')
+        $users = DB::table('users')
         ->join('roles', 'users.role_id', '=', 'roles.id')
         ->orderBy($column, $sort)
         ->select('users.*', 'roles.role')
         ->get();
-        return view('user.allUser', ['data' => $users]);*/
-        $data1 = HowToModel::where('zavod_sn', 'LIKE', "%bjca%")->get();
-        if(empty($data1[0])){
-           return 'false';
-        }else{
-            return 'true';
-        }
-            
-        dd($data1);
+        return view('user.allUser', ['data' => $users]);
         
+              
     }
     public function oneUser($id)
     {

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Counter;
 use App\Helpers\Telegram;
 use App\Models\HowToModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class telegramController extends Controller
 {
@@ -14,6 +16,25 @@ class telegramController extends Controller
     {
         $chat_id = $request['message']['chat']['id'];
         $text = $request['message']['text'];
+        $from_id = $request['message']['from']['id'];
+        $first_name = $request['message']['from']['first_name'];
+        $last_name = $request['message']['from']['last_name'];
+        $username = $request['message']['from']['username'];
+
+        $data = Counter::where('from_id', '=', $from_id)->count();
+        if($data == 0)
+        {
+            $data = new Counter();
+            $data->from_id = $from_id;
+            $data->first_name = $first_name;
+            $data->last_name = $last_name;
+            $data->username = $username;
+            $data->increment = 0;
+            $data->save();
+            
+        }
+        $query = DB::table('counters')->where('from_id', '=', $from_id)->increment('increment');  
+
         if(strlen($text) >= 4){
             $search =  '%'.$text.'%'; //str_replace("*", "%", $search1);
             $data1 = HowToModel::where('zavod_sn', 'LIKE', "$search")->get();
