@@ -18,6 +18,9 @@ use App\Http\Controllers\telegramController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/topdf', function () {
+    return view('exports.topdf');
+});
 
 Route::get('/', function () {
     return view('welcome');
@@ -176,7 +179,7 @@ Route::middleware(['admin','auth'])->group(function(){
 //----------------------------------------------------------------------------------------------------
 
 Route::get('/test', function () {
-    return intval(9,9);
+    return view('layouts.sss');
 });
 
 require __DIR__.'/auth.php';

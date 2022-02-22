@@ -28,11 +28,16 @@ class WaitExport implements FromView, WithStyles, WithColumnWidths, WithColumnFo
             'A' => 13,
             'B' => 23, 
             'C' => 45,
-            'D' => 7,
-            'E' => 5,   
-            'F' => 10,
-            'G' => 12,
-            'H' => 10,        
+            'D' => 12,
+            'E' => 7,   
+            'F' => 5,
+            'G' => 10,
+            'H' => 12,
+            'I' => 3,
+            'J' => 3,
+            'K' => 3,
+            'L' => 3,   
+            'M' => 10,
         ];
     }
     public function styles(Worksheet $sheet)
@@ -47,11 +52,12 @@ class WaitExport implements FromView, WithStyles, WithColumnWidths, WithColumnFo
         ->join('statuses', 'waitings.status_id', '=', 'statuses.id')
         ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')       
         ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 1)
         ->select('waitings.crm_id', 'waitings.sap_kod', 'spareparts.name as sapname', 'warehouses.Kod as warehouseskod',
         'waitings.how', 'waitings.created_at', 'statuses.name as statusname', 'waitings.order')
         ->count() + 2;
         $style = [
-            'A1:H1'    => [   'borders' => 
+            'A1:M1'    => [   'borders' => 
                                 [   'allBorders' => 
                                     [   'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,]
                                 ],
@@ -68,7 +74,7 @@ class WaitExport implements FromView, WithStyles, WithColumnWidths, WithColumnFo
         while($i < $waits){
             $stylein = [
                 // Style the first row as bold text.
-                'A'.$i.':H'.$i    => [   'borders' => 
+                'A'.$i.':M'.$i    => [   'borders' => 
                                 [   'allBorders' => 
                                     [   'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,]
                                 ],
@@ -100,8 +106,9 @@ class WaitExport implements FromView, WithStyles, WithColumnWidths, WithColumnFo
         ->join('statuses', 'waitings.status_id', '=', 'statuses.id')
         ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')       
         ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 1)
         ->select('waitings.crm_id', 'waitings.sap_kod', 'spareparts.name as sapname', 'warehouses.Kod as warehouseskod',
-        'waitings.how', 'waitings.created_at', 'statuses.name as statusname', 'waitings.order')
+        'waitings.how', 'waitings.created_at', 'statuses.name as statusname', 'waitings.order', 'warehouses.name as servisname')
         ->get();
 
         return View('exports.allwaits', [

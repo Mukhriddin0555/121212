@@ -93,11 +93,17 @@
                         </div>
                         
                     </div>
+                    <div class="py-2">
+                      sss
+                    </div>
                     @endforeach
                     
                     
                 </div>
+                
             </div>
+            
         </div>
+      
     </x-slot>
 </x-zavsklad.ojidaniye>
