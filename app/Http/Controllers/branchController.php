@@ -322,7 +322,8 @@ class branchController extends Controller
         ->where('user_id', $user)
         ->get();
         $sklad_id = $sklad_id[0]->Kod;
+        $date = date("Y-m-d");
         //dd($sklad_id);
-        return Excel::download(new WaitExport, $sklad_id.'.xlsx');
+        return Excel::download(new WaitExport, $date . "-" . $sklad_id . '.xlsx');
     }
 }
