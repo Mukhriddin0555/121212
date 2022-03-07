@@ -7,6 +7,7 @@ use App\Http\Controllers\FilialManagerController;
 use App\Http\Controllers\resseptionController;
 use App\Http\Controllers\sparepartmanagerController;
 use App\Http\Controllers\telegramController;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -180,6 +181,13 @@ Route::middleware(['admin','auth'])->group(function(){
 
 Route::get('/test', function () {
     return view('layouts.sss');
+});
+
+Route::get('/clear', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('route:clear');
 });
 
 require __DIR__.'/auth.php';
