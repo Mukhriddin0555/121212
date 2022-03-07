@@ -239,9 +239,9 @@ class adminController extends Controller
         ->get();
         $branchmanager = DB::table('roles')
         ->join('users', 'roles.id', '=', 'users.role_id')
-        ->where('role', 'branchmanager')
+        ->where('role', 'branchfilmanager')
         ->get();
-
+        //dd($branchmanager);
         return view('branch.editOneBranch', ['data1' => $manager, 'data2' => $zavsklad, 'data3' => $branch, 'data4' => $branchmanager]);
     }
     public function updateOneBranch(Request $req, $id)

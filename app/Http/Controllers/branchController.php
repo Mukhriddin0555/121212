@@ -21,8 +21,7 @@ class branchController extends Controller
         $user = Auth::User()->id;
         $sklad_id = DB::table('warehouses')
         ->where('user_id', $user)
-        ->get();
-        $sklad_id = $sklad_id[0]->id;
+        ->first()->id;
         $wait = DB::table('resseption_orders')
         ->where('warehouse_id', $sklad_id)
         ->where('status_id', 1)
@@ -32,16 +31,10 @@ class branchController extends Controller
     }
     
     public function counterVputi(){
-        /*$wait = DB::table('waitings')
-        ->where('warehouse_id', $sklad_id)
-        ->select( 'status_id' , DB::raw ( 'count(*) as total' ) )
-        ->groupBy( 'status_id' )
-        ->get();*/
         $user = Auth::User()->id;
         $sklad_id = DB::table('warehouses')
         ->where('user_id', $user)
-        ->get();
-        $sklad_id = $sklad_id[0]->id;
+        ->first()->id;
         $wait = DB::table('waitings')
         ->where('warehouse_id', $sklad_id)
         ->where('status_id', 3)
@@ -52,8 +45,7 @@ class branchController extends Controller
         $user = Auth::User()->id;
         $sklad_id = DB::table('warehouses')
         ->where('user_id', $user)
-        ->get();
-        $sklad_id = $sklad_id[0]->id;
+        ->first()->id;
         $wait = DB::table('waitings')
         ->where('warehouse_id', $sklad_id)
         ->where('status_id', 1)
@@ -64,8 +56,7 @@ class branchController extends Controller
         $user = Auth::User()->id;
         $sklad_id = DB::table('warehouses')
         ->where('user_id', $user)
-        ->get();
-        $sklad_id = $sklad_id[0]->id;
+        ->first()->id;
         $wait = DB::table('waitings')
         ->where('warehouse_id', $sklad_id)
         ->where('status_id', 2)
@@ -85,8 +76,7 @@ class branchController extends Controller
        $user = Auth::User()->id;
         $sklad_id = DB::table('warehouses')
         ->where('user_id', $user)
-        ->get();
-        $sklad_id = $sklad_id[0]->id;
+        ->first()->id;
         $wait = DB::table('waitings')
         ->leftJoin('spareparts', 'waitings.sap_kod', '=', 'spareparts.sap_kod')
         ->join('statuses', 'waitings.status_id', '=', 'statuses.id')        
@@ -100,7 +90,7 @@ class branchController extends Controller
         $data4 = $this->counterDostavlen();
         $data5 = $this->counterProdaja();
         
-        
+        //dd($wait);
         return view('zavsklad.allwait', ['data1' => $wait, 'data2' => $status, 'data3' => $count, 'data4' => $data4, 'data5' => $data5]);
     }
     public function vputi($column, $sort)
@@ -229,7 +219,7 @@ class branchController extends Controller
         if($this->validateDate($date)){
             $wait->save();
         }
-        return redirect()->route('allWait', ['crm_id', 'asc']);
+        return redirect()->route('zavsklad');
         
     }
     public function editOneWait($id)

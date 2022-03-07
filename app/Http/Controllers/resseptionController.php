@@ -76,5 +76,6 @@ class resseptionController extends Controller
         $order->status_id = 1;
         $order->save();
         return redirect('resseption');
+        
     }
 }

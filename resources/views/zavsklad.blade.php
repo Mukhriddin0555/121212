@@ -1,7 +1,10 @@
 <x-zavsklad.ojidaniye>
     <x-slot name="header">
         @section('session-start')
-           <div class="m-5">sss</div>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight m-5">
+            Добро пожаловать {{ Auth::user()->lastname }} {{ Auth::user()->surname }}
+        </h2>
+        @include('zavsklad.forminorder')
         @endsection
         @section('countwait')
             {{ $data3 }}
