@@ -52,7 +52,7 @@ class WaitExport implements FromView, WithStyles, WithColumnWidths, WithColumnFo
         ->join('statuses', 'waitings.status_id', '=', 'statuses.id')
         ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')       
         ->where('warehouse_id', $sklad_id)
-        ->where('status_id', 1)
+        ->where('status_id', '!=', 2)
         ->select('waitings.crm_id', 'waitings.sap_kod', 'spareparts.name as sapname', 'warehouses.Kod as warehouseskod',
         'waitings.how', 'waitings.created_at', 'statuses.name as statusname', 'waitings.order')
         ->count() + 2;
@@ -106,7 +106,7 @@ class WaitExport implements FromView, WithStyles, WithColumnWidths, WithColumnFo
         ->join('statuses', 'waitings.status_id', '=', 'statuses.id')
         ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')       
         ->where('warehouse_id', $sklad_id)
-        ->where('status_id', 1)
+        ->where('status_id', '!=', 2)
         ->select('waitings.crm_id', 'waitings.sap_kod', 'spareparts.name as sapname', 'warehouses.Kod as warehouseskod',
         'waitings.how', 'waitings.created_at', 'statuses.name as statusname', 'waitings.order', 'warehouses.name as servisname')
         ->get();

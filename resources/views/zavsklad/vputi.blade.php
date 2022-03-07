@@ -29,47 +29,16 @@
         </div>
         @endforeach
         @endif
-        <form class="w-full" action="{{ route('addNewWait')}}" method="post">
-            @csrf
-            <br>
-            <div class="flex flex-nowrap mb-6">
-              <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                  CRM ID
-                </label>
-                <input name="crm_id" type="number" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text">
-              </div>
-              <div class="w-full md:w-1/4 px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                  Сап код
-                </label>
-                <input name="sap_kod" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
-              </div>
-              <div class="w-full md:w-1/4 px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                    кол-во
-                </label>
-                <input name="how" value="1" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
-              </div>
-              <div class="w-full md:w-1/4 px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                    Номер заказа
-                </label>
-                <input name="order" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
-              </div>
-            </div>
-            <button type="submit" class="align-center bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Добавить</button>
-          </form>
         <div>
             <div class="max-w-7xl ml-2 mx-auto sm:px-6>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table class="flex justify-center my-3.5">
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['data', 'asc'])}}">Дата ID</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['crm_id', 'asc'])}}">CRM ID</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['sap_kod', 'asc'])}}">Сап код</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['sapname', 'asc'])}}">Наименование</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['how', 'asc'])}}">шт</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['order', 'asc'])}}">Заказ</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('vputi', ['data', 'asc'])}}">Дата ID</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('vputi', ['crm_id', 'asc'])}}">CRM ID</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('vputi', ['sap_kod', 'asc'])}}">Сап код</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('vputi', ['sapname', 'asc'])}}">Наименование</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('vputi', ['how', 'asc'])}}">шт</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('vputi', ['order', 'asc'])}}">Заказ</a></th>
                         <th class="p-1 pr-3"></th>   
                         <th class="p-1 pr-3"></th>
                         <th class="p-1 pr-3"></th>
@@ -101,10 +70,10 @@
                                     {{$item->order}}
                                 </td>
                                 <th class="p-1 pr-1">
-                                    <x-link.delivered deld="{{ route('deliveredOneWait', [$item->id, 'allWait'])}}" />
+                                    <x-link.delivered deld="{{ route('deliveredOneWait', [$item->id, 'vputi'])}}" />
                                 </th>
                                 <th class="p-1 pr-1">
-                                    <x-link.delete delete="{{ route('deleteOneWait', [$item->id, 'allWait']) }}" />
+                                    <x-link.delete delete="{{ route('deleteOneWait', [$item->id, 'vputi']) }}" />
                                 </th>
                                 <th class="p-1 pr-1 text-xs">
                                     <input type="checkbox" name="selected[]" form="selectedopt" value="{{$item->id}}">
@@ -127,8 +96,8 @@
             <div class="flex justify-center">
                 <input type="button" onclick='selects()' value="выбрать все" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400"><br>
                 <input type="button" onclick='deSelect()' value="отменить все" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400">
-                <button form="selectedopt" formaction="{{ route('selecteddelivered', 'allWait')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Доставлен</button>
-                <button form="selectedopt"  formaction="{{ route('selecteddelete', 'allWait')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Удалить</button>
+                <button form="selectedopt" formaction="{{ route('selecteddelivered', 'vputi')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Доставлен</button>
+                <button form="selectedopt"  formaction="{{ route('selecteddelete', 'vputi')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Удалить</button>
                 <button title="Экспортировать в книгу экзель" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 "><a href="{{ route('allWaitExport')}}">Экспорт в Excel</a></button>
                 
                 <br>
@@ -137,10 +106,10 @@
         
         @endsection
         @section('countwait')
-            {{ $count }}
+            {{ $data3 }}
         @endsection
         @section('countvputi')
-            {{ $data3 }}
+            {{ $count }}
         @endsection
         @section('countdostavlen')
             {{ $data4 }}
@@ -148,6 +117,7 @@
         @section('countprodaja')
             {{ $data5 }}
         @endsection
+        
         
     </x-slot>
 </x-zavsklad.ojidaniye>

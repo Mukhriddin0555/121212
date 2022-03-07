@@ -53,4 +53,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(warehouse::class);
     }
+    public function skladid($id)
+    {
+        
+        return $this->hasOne(warehouse::class);
+    }
 }

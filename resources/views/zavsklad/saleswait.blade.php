@@ -1,10 +1,10 @@
 <x-zavsklad.ojidaniye>
     <x-slot name="header">
+        @section('session-start')
         <div class="py-2">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <table>
-                        <th class="p-2 pr-3">№</th>
+                    <table class="flex justify-center">
                         <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['crm_id', 'asc'])}}">CRM ID</a></th>
                         <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['sap_kod', 'asc'])}}">Сап код</a></th>
                         <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['sapname', 'asc'])}}">Наименование</a></th>
@@ -16,9 +16,6 @@
                         <th class="p-2 pr-3"></th> 
                         @foreach ($data as $item)
                             <tr>
-                                <td class="p-2 pr-3">
-                                    {{$loop->index+1}}
-                                </td>
                                 <td class="p-2 pr-3">
                                     {{$item->crm_id}}
                                 </td>
@@ -65,5 +62,19 @@
                 </div>
             </div>
         </div>
+        @endsection
+        @section('countwait')
+            {{ $data2 }}
+        @endsection
+        @section('countvputi')
+            {{ $data3 }}
+        @endsection
+        @section('countdostavlen')
+            {{ $data4 }}
+        @endsection
+        @section('countprodaja')
+            {{ $data5 }}
+        @endsection
+        
     </x-slot>
 </x-zavsklad.ojidaniye>

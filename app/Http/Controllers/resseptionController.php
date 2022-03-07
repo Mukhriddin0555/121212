@@ -9,7 +9,33 @@ use Illuminate\Support\Facades\Auth;
 
 class resseptionController extends Controller
 {
-    public function ressepshnOrders($column, $sort)
+    public function counterwait()
+    {   
+        $user = Auth::User()->id;
+        $data = DB::table('resseption_orders')
+        ->where('user_id', $user)
+        ->where('status_id', 1)
+        ->count();
+        return $data;
+    }
+    public function counterdostavlen()
+    {   
+        $user = Auth::User()->id;
+        $data = DB::table('resseption_orders')
+        ->where('user_id', $user)
+        ->where('status_id', 2)
+        ->count();
+        return $data;
+    }
+    public function resseptionenter()
+    {   
+        $data2 = $this->counterwait();
+        $data3 = $this->counterdostavlen();
+
+        return view('resseption', ['data2' => $data2, 'data3' => $data3]);
+    }
+    
+    public function ressepshnOrders($status, $column, $sort)
     {   
         $user = Auth::User()->id;
         $data = DB::table('resseption_orders')
@@ -17,9 +43,14 @@ class resseptionController extends Controller
         ->join('statuses', 'resseption_orders.status_id', '=', 'statuses.id')
         ->select('resseption_orders.*', 'spareparts.name as sapname','statuses.name as statusname')
         ->where('user_id', $user)
+        ->where('status_id', $status)
         ->orderBy($column, $sort)
         ->get();
-        return view('resseption.orders', ['data' => $data]);
+        $data2 = $this->counterwait();
+        $data3 = $this->counterdostavlen();
+
+
+        return view('resseption.orders', ['data' => $data, 'data2' => $data2, 'data3' => $data3]);
     }
 
     public function newRessepshnOrders(Request $req)
@@ -44,6 +75,6 @@ class resseptionController extends Controller
         $order->user_id = $user;
         $order->status_id = 1;
         $order->save();
-        return redirect()->route('ressepshnOrders', ['crm_id', 'asc']);
+        return redirect('resseption');
     }
 }

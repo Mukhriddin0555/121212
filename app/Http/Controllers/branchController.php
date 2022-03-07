@@ -17,6 +17,69 @@ use Maatwebsite\Excel\Facades\Excel;
 class branchController extends Controller
 {
     //обработка ожидании запчастей
+    public function counterProdaja(){
+        $user = Auth::User()->id;
+        $sklad_id = DB::table('warehouses')
+        ->where('user_id', $user)
+        ->get();
+        $sklad_id = $sklad_id[0]->id;
+        $wait = DB::table('resseption_orders')
+        ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 1)
+        ->count();
+
+        return $wait;
+    }
+    
+    public function counterVputi(){
+        /*$wait = DB::table('waitings')
+        ->where('warehouse_id', $sklad_id)
+        ->select( 'status_id' , DB::raw ( 'count(*) as total' ) )
+        ->groupBy( 'status_id' )
+        ->get();*/
+        $user = Auth::User()->id;
+        $sklad_id = DB::table('warehouses')
+        ->where('user_id', $user)
+        ->get();
+        $sklad_id = $sklad_id[0]->id;
+        $wait = DB::table('waitings')
+        ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 3)
+        ->count();
+        return $wait;
+    }
+    public function counterWait(){
+        $user = Auth::User()->id;
+        $sklad_id = DB::table('warehouses')
+        ->where('user_id', $user)
+        ->get();
+        $sklad_id = $sklad_id[0]->id;
+        $wait = DB::table('waitings')
+        ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 1)
+        ->count();
+        return $wait;
+    }
+    public function counterDostavlen(){
+        $user = Auth::User()->id;
+        $sklad_id = DB::table('warehouses')
+        ->where('user_id', $user)
+        ->get();
+        $sklad_id = $sklad_id[0]->id;
+        $wait = DB::table('waitings')
+        ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 2)
+        ->count();
+        return $wait;
+    }
+    public function zavsklad(){
+        $data2 = $this->counterVputi();
+        $data3 = $this->counterWait();
+        $data4 = $this->counterDostavlen();
+        $data5 = $this->counterProdaja();
+
+        return view('zavsklad', ['data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);
+    }
     public function allWait($column, $sort)
     {        
        $user = Auth::User()->id;
@@ -28,12 +91,61 @@ class branchController extends Controller
         ->leftJoin('spareparts', 'waitings.sap_kod', '=', 'spareparts.sap_kod')
         ->join('statuses', 'waitings.status_id', '=', 'statuses.id')        
         ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 1)
         ->select('waitings.*', 'spareparts.name as sapname','statuses.name as statusname', 'statuses.id as statusid')
         ->orderBy($column, $sort)
         ->get();
         $status = status::all();
+        $count = $this->counterVputi();
+        $data4 = $this->counterDostavlen();
+        $data5 = $this->counterProdaja();
         
-        return view('zavsklad.allwait', ['data1' => $wait, 'data2' => $status]);
+        
+        return view('zavsklad.allwait', ['data1' => $wait, 'data2' => $status, 'data3' => $count, 'data4' => $data4, 'data5' => $data5]);
+    }
+    public function vputi($column, $sort)
+    {        
+       $user = Auth::User()->id;
+        $sklad_id = DB::table('warehouses')
+        ->where('user_id', $user)
+        ->get();
+        $sklad_id = $sklad_id[0]->id;
+        $wait = DB::table('waitings')
+        ->leftJoin('spareparts', 'waitings.sap_kod', '=', 'spareparts.sap_kod')
+        ->join('statuses', 'waitings.status_id', '=', 'statuses.id')        
+        ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 3)
+        ->select('waitings.*', 'spareparts.name as sapname','statuses.name as statusname', 'statuses.id as statusid')
+        ->orderBy($column, $sort)
+        ->get();
+        $status = status::all();
+        $count = $this->counterWait();
+        $data4 = $this->counterDostavlen();
+        $data5 = $this->counterProdaja();
+        
+        return view('zavsklad.vputi', ['data1' => $wait, 'data2' => $status, 'data3' => $count, 'data4' => $data4, 'data5' => $data5]);
+    }
+    public function dostavlen($column, $sort)
+    {        
+       $user = Auth::User()->id;
+        $sklad_id = DB::table('warehouses')
+        ->where('user_id', $user)
+        ->get();
+        $sklad_id = $sklad_id[0]->id;
+        $wait = DB::table('waitings')
+        ->leftJoin('spareparts', 'waitings.sap_kod', '=', 'spareparts.sap_kod')
+        ->join('statuses', 'waitings.status_id', '=', 'statuses.id')        
+        ->where('warehouse_id', $sklad_id)
+        ->where('status_id', 2)
+        ->select('waitings.*', 'spareparts.name as sapname','statuses.name as statusname', 'statuses.id as statusid')
+        ->orderBy($column, $sort)
+        ->get();
+        $status = status::all();
+        $count = $this->counterWait();
+        $data4 = $this->counterVputi();
+        $data5 = $this->counterProdaja();
+        
+        return view('zavsklad.dostavlen', ['data1' => $wait, 'data2' => $status, 'data3' => $count, 'data4' => $data4, 'data5' => $data5]);
     }
     public function oneWait($id)
     {        
@@ -49,12 +161,12 @@ class branchController extends Controller
         return view('zavsklad.onewait', ['data' => $onewait]);
         //dd($onewait);
     }
-    public function deleteOneWait($id)
+    public function deleteOneWait($id, $routename)
     {        
         $onewait = waiting::find($id);
         $onewait->delete();
 
-        return redirect()->route('allWait', ['crm_id', 'asc']);
+        return redirect()->route($routename, ['crm_id', 'asc']);
     }
     public function statusOneWait(Request $req, $id)
     {        
@@ -66,12 +178,12 @@ class branchController extends Controller
         $onewait->save();
         return redirect()->route('allWait', ['crm_id', 'asc']);
     }
-    public function deliveredOneWait($id)
+    public function deliveredOneWait($id, $routename)
     {        
         $onewait = waiting::find($id);
         $onewait->status_id = 2;
         $onewait->save();
-        return redirect()->route('allWait', ['crm_id', 'asc']);
+        return redirect()->route($routename, ['crm_id', 'asc']);
     }
     public function findDate($crmid)
     {
@@ -157,7 +269,11 @@ class branchController extends Controller
         ->orderBy($column, $sort)
         ->get();
         //dd($wait);
-        return view('zavsklad.saleswait', ['data' => $wait]);
+        $data2 = $this->counterWait();
+        $data3 = $this->counterVputi();
+        $data4 = $this->counterDostavlen();
+        $data5 = $this->counterProdaja();
+        return view('zavsklad.saleswait', ['data' => $wait, 'data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);
     }
     public function oneWaitOrder(Request $req, $id)
     {     
@@ -289,16 +405,16 @@ class branchController extends Controller
         return redirect()->route('myTransfers', ['sap_kod', 'asc']);
     }
 
-    public function selecteddelivered(Request $req){
+    public function selecteddelivered(Request $req, $routename = 'allWait'){
         foreach ($req->selected as $item => $value){
             $onewait = waiting::find($value);
             $onewait->status_id = 2;
             $onewait->save();
         }
         
-        return redirect()->route('allWait', ['crm_id', 'asc']);
+        return redirect()->route($routename, ['crm_id', 'asc']);
     }
-    public function selecteddelete(Request $req){
+    public function selecteddelete(Request $req, $routename = 'allWait'){
         
         foreach ($req->selected as $item => $value){
             $onewait = waiting::find($value);
@@ -313,7 +429,7 @@ class branchController extends Controller
             $history->save();
             $onewait->delete();
         }
-        return redirect()->route('allWait', ['crm_id', 'asc']);
+        return redirect()->route($routename, ['crm_id', 'asc']);
     }
 
     public function allWaitExport(){
@@ -325,5 +441,8 @@ class branchController extends Controller
         $date = date("Y-m-d");
         //dd($sklad_id);
         return Excel::download(new WaitExport, $date . "-" . $sklad_id . '.xlsx');
+    }
+    public function searchid(Request $req){
+        return 1234;
     }
 }

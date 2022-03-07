@@ -70,10 +70,10 @@ Route::middleware(['branch-upr','auth'])->group(function(){
 //---------------------------------------------------------------------------------------------------
 Route::middleware(['resseption','auth'])->group(function(){
     //роль рессепшна видеть свои заказы. фильтрация + добавление заказов пост 3 та линк
-    Route::get('/resseption', function () {
-        return view('resseption');
-    })->middleware(['auth'])->name('resseption');
-    Route::get('/resseption/{column}/{sort}',[resseptionController::class, 'ressepshnOrders'])->name('ressepshnOrders');
+    
+    Route::get('/resseption',[resseptionController::class, 'resseptionenter'])->name('resseption');
+    
+    Route::get('/resseption/{status}/{column}/{sort}',[resseptionController::class, 'ressepshnOrders'])->name('ressepshnOrders');
     Route::post('/resseption/neworder',[resseptionController::class, 'newRessepshnOrders'])->name('newRessepshnOrders');
 
 });
@@ -83,26 +83,26 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     //роль зав.склада доступ только зав. складу
     //трансферларга запрос
     //ожидания холатини янгилаш статусларини узгартириш зав. склад киладиган барча ишлар
-    Route::get('/zavsklad', function () {
-        return view('zavsklad');
-    })->middleware(['auth'])->name('zavsklad');
-
+    Route::get('/zavsklad',[branchController::class, 'zavsklad'])->name('zavsklad');
+    
+    Route::get('/search/get',[branchController::class, 'searchid'])->name('searchid');
     Route::get('/waitings/all/export',[branchController::class, 'allWaitExport'])->name('allWaitExport');
-
+    Route::get('/vputi/{column}/{sort}',[branchController::class, 'vputi'])->name('vputi');
+    Route::get('/dostavlen/{column}/{sort}',[branchController::class, 'dostavlen'])->name('dostavlen');
     Route::get('/waiting/{column}/{sort}',[branchController::class, 'allWait'])->name('allWait'); // шу ни узида янги ожидания кушилади
     Route::get('/waitings/{id}/get',[branchController::class, 'oneWait'])->name('oneWait');
 
-    Route::get('/waitings/{id}/delete',[branchController::class, 'deleteOneWait'])->name('deleteOneWait');
+    Route::get('/waitings/{id}/delete/{routename}',[branchController::class, 'deleteOneWait'])->name('deleteOneWait');
     Route::get('/waitings/{id}/editstatus',[branchController::class, 'statusOneWait'])->name('statusOneWait');
-    Route::get('/waitings/{id}/delivered',[branchController::class, 'deliveredOneWait'])->name('deliveredOneWait');
+    Route::get('/waitings/{id}/delivered/{routename}',[branchController::class, 'deliveredOneWait'])->name('deliveredOneWait');
 
     Route::post('/wait/new',[branchController::class, 'addNewWait'])->name('addNewWait');
 
     Route::get('/wait/{id}/edit',[branchController::class, 'editOneWait'])->name('editOneWait');
     Route::post('/wait/{id}/edit',[branchController::class, 'updateOneWait'])->name('updateOneWait');
 
-    Route::get('/waitings/selected1',[branchController::class, 'selecteddelivered'])->name('selecteddelivered');
-    Route::get('/waitings/selected2',[branchController::class, 'selecteddelete'])->name('selecteddelete');
+    Route::get('/waitings/selected1/{routename}',[branchController::class, 'selecteddelivered'])->name('selecteddelivered');
+    Route::get('/waitings/selected2/{routename}',[branchController::class, 'selecteddelete'])->name('selecteddelete');
     //----------------------------------------------------------------------------------------------------------
     //продажа учун роут
     Route::get('/waitorder/{column}/{sort}',[branchController::class, 'allWaitOrder'])->name('allWaitOrder');

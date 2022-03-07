@@ -1,7 +1,19 @@
 <x-zavsklad.ojidaniye>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Добро пожаловать Зав. склад
-        </h2>
+        @section('session-start')
+           <div class="m-5">sss</div>
+        @endsection
+        @section('countwait')
+            {{ $data3 }}
+        @endsection
+        @section('countvputi')
+            {{ $data2 }}
+        @endsection
+        @section('countdostavlen')
+            {{ $data4 }}
+        @endsection
+        @section('countprodaja')
+            {{ $data5 }}
+        @endsection
     </x-slot>
 </x-zavsklad.ojidaniye>
