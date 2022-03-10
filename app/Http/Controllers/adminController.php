@@ -8,15 +8,16 @@ use App\Models\User;
 use App\Models\answer;
 use App\Models\status;
 use App\Models\answaer;
+use App\Models\Counter;
 use App\Models\sparepart;
 use App\Models\warehouse;
+use App\Models\HowToModel;
+use App\Imports\me2nImport;
 use App\Imports\SpareImport;
 use Illuminate\Http\Request;
 use App\Exports\SparePartExport;
-use App\Imports\HowToModelImport;
 use App\Imports\SparePartImport;
-use App\Models\Counter;
-use App\Models\HowToModel;
+use App\Imports\HowToModelImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -412,6 +413,13 @@ class adminController extends Controller
         $result = Excel::import(new HowToModelImport, $file);
         
         return redirect()->route('sparePart');
+    }
+    public function importMe2n(Request $req) 
+    {
+        $file = $req->file('me2nimport');
+        $new_status = Excel::import(new me2nImport, $file);
+
+        return redirect()->route('sparePart')->with('succecc', 'успешно обновлено');
     }
 
 }

@@ -1,6 +1,5 @@
 <x-app-layout>
     <x-slot name="header">
-      <a href="{{ route('allExport')}}">Экспортировать список запчастей в файл экзель</a> <br>
       @if ($errors->any())
       @foreach ($errors->all() as $error)
       <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -71,6 +70,21 @@
                   Модельларни импорт килиш
                 </label>
                 <input name="modelimport" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
+                <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
+              </div>
+            </div>
+            <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
+          </form>
+          <form class="w-full max-w-lg" action="{{ route('me2nImport')}}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div><h6>Добавить ME2N</h6></div>
+            <br>
+            <div class="flex flex-wrap -mx-3 mb-6">
+              <div class="w-full px-3">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                  ME2N импорт килиш
+                </label>
+                <input name="me2nimport" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
                 <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
               </div>
             </div>

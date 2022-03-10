@@ -17,7 +17,8 @@
                       
                 }  
             }             
-        </script> 
+        </script>
+        <form id="selectedopt" method="GET"></form> 
         <div>
             <div class="max-w-7xl ml-2 mx-auto sm:px-6>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

@@ -169,6 +169,7 @@ Route::middleware(['admin','auth'])->group(function(){
     Route::get('/allsparepart/export',[adminController::class, 'allExport'])->name('allExport');
     Route::post('/sparepart/new',[adminController::class, 'addsparePart'])->name('addsparePart');
     Route::post('/sparepart/modelImport',[adminController::class, 'modelImport'])->name('modelImport');
+    Route::post('/sparepart/me2nImport',[adminController::class, 'importMe2n'])->name('me2nImport');
 
 //----------------------------------------------------------------------------------------------------
     //жавобларни кушиш/учириш

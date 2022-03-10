@@ -75,7 +75,7 @@ class resseptionController extends Controller
         $order->user_id = $user;
         $order->status_id = 1;
         $order->save();
-        return redirect('resseption');
+        return redirect()->redirect('resseption');
         
     }
 }
