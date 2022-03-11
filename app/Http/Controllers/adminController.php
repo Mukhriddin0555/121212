@@ -12,7 +12,8 @@ use App\Models\Counter;
 use App\Models\sparepart;
 use App\Models\warehouse;
 use App\Models\HowToModel;
-use App\Imports\me2nImport;
+use App\Models\me2nImport;
+use App\Imports\me2n_Import;
 use App\Imports\SpareImport;
 use Illuminate\Http\Request;
 use App\Exports\SparePartExport;
@@ -417,7 +418,7 @@ class adminController extends Controller
     public function importMe2n(Request $req) 
     {
         $file = $req->file('me2nimport');
-        $new_status = Excel::import(new me2nImport, $file);
+        $new_status = Excel::import(new me2n_Import, $file);
 
         return redirect()->route('sparePart')->with('succecc', 'успешно обновлено');
     }

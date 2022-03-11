@@ -276,14 +276,14 @@ class branchController extends Controller
     {     
         $wait = resseptionOrders::find($id);
         $wait->delete();
-        return redirect()->route('allWaitOrder', ['crm_id', 'asc']);
+        return redirect()->route('allWaitOrder', ['statusname', 'desc']);
     }
     public function deliveredOneWaitOrder($id)
     {     
         $wait = resseptionOrders::find($id);
         $wait->status_id = 2;
         $wait->save();
-        return redirect()->route('allWaitOrder', ['crm_id', 'asc']);
+        return redirect()->route('allWaitOrder', ['statusname', 'desc']);
     }
 
     //--------------------------------------------------------------

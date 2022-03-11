@@ -14,6 +14,7 @@ class CreateMe2nImportsTable extends Migration
     public function up()
     {
         Schema::create('me2n_imports', function (Blueprint $table) {
+            $table->id();
             $table->string('sap');
             $table->string('postupleniye');
             $table->string('prihod');
