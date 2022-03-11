@@ -26,28 +26,26 @@ class me2n_Import implements ToModel
                 ->where('sap', $rows[1])
                 ->where('postupleniye', $rows[4])
                 ->count();
-
-                if($me2n == 0){
-                    
-                    $order = DB::table('waitings')
-                    ->where('status_id', 1)
-                    ->where('crm_id', $rows[0])
-                    ->where('sap_kod', $rows[1])
-                    ->first();
+                
+                $order = DB::table('waitings')
+                ->where('status_id', 1)
+                ->where('crm_id', $rows[0])
+                ->where('sap_kod', $rows[1])
+                ->first();
     
                     
                     
-                    if($order && $order->how <= $rows[2]){
-                        
-                        $order = DB::table('waitings')
-                        ->where('status_id', 1)
-                        ->where('crm_id', $rows[0])
-                        ->where('sap_kod', $rows[1])
-                        ->where('how', $rows[2])
-                        ->update(["status_id" => 3]);
-                        
-                    }
-                    
+                if($order && $order->how <= $rows[2]){
+                
+                $order = DB::table('waitings')
+                ->where('status_id', 1)
+                ->where('crm_id', $rows[0])
+                ->where('sap_kod', $rows[1])
+                ->where('how', $rows[2])
+                ->update(["status_id" => 3]);
+                
+                }
+                if($me2n == 0){
                     if($rows[0] == 'rsp'){
                         $warehouse = DB::table('waitings')
                         ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')
