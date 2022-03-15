@@ -315,7 +315,13 @@ class branchController extends Controller
         ->where('id', '!=', $sklad_id)
         ->get();
         
-        return view('zavsklad.fromtransfer', ['data1' => $transfer, 'data2' => $confirm, 'data3' => $branch]);
+        $data4 = $this->counterWait();
+        $data5 = $this->counterVputi();
+        $data6 = $this->counterDostavlen();
+        $data7 = $this->counterProdaja();
+
+        return view('zavsklad.fromtransfer', ['data1' => $transfer, 'data2' => $confirm, 'data3' => $branch,
+        'data4' => $data4, 'data5' => $data5, 'data6' => $data6, 'data7' => $data7]);
         //dd($confirm);
     }
     public function oneMyTransfer(Request $req, $id)
@@ -349,11 +355,15 @@ class branchController extends Controller
         ->where('to_user_id', $sklad_id)
         ->orderBy($column, $sort)
         ->get();
-
+        $data4 = $this->counterWait();
+        $data5 = $this->counterVputi();
+        $data6 = $this->counterDostavlen();
+        $data7 = $this->counterProdaja();
 
         $confirm = DB::table('answaers')->get();
 
-        return view('zavsklad.totransfer', ['data1' => $transfer, 'data2' => $confirm]);
+        return view('zavsklad.totransfer', ['data1' => $transfer, 'data2' => $confirm,
+        'data4' => $data4, 'data5' => $data5, 'data6' => $data6, 'data7' => $data7]);
     }
     public function oneOurTransfer(Request $req, $id)
     {     
@@ -433,6 +443,26 @@ class branchController extends Controller
         return Excel::download(new WaitExport, $date . "-" . $sklad_id . '.xlsx');
     }
     public function searchid(Request $req){
-        return 1234;
+        
+        $search1 = $req->search;
+        $search =  str_replace("*", "%", $search1);
+        $data = waiting::where('crm_id', 'LIKE', "$search")->count();
+        if($data > 1){
+            $data1 = waiting::where('crm_id', 'LIKE', "$search")->get();
+            $data2 = $this->counterVputi();
+            $data3 = $this->counterWait();
+            $data4 = $this->counterDostavlen();
+            $data5 = $this->counterProdaja();
+            return view('zavsklad.searchid', ['data1' => $data1, 'data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);
+        }
+        if($data == 1){
+            $data = waiting::where('crm_id', 'LIKE', "$search")->first();
+            return redirect()->route('oneWait', $data->id);
+            
+        }
+        if($data == 0){
+            return redirect()->route('zavsklad')->with('errorid', 'В базе данных не найдено совпадений по записи:' . $search1);
+            
+        }
     }
 }

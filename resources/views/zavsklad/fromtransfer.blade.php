@@ -1,5 +1,6 @@
 <x-zavsklad.ojidaniye>
     <x-slot name="header">
+        @section('session-start')
         @if ($errors->any())
         @foreach ($errors->all() as $error)
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -10,25 +11,25 @@
         </div>
         @endforeach
         @endif
-        <form class="w-full max-w-lg" action="{{ route('newtransfer')}}" method="post">
+        <form class="w-full " action="{{ route('newtransfer')}}" method="post">
             @csrf
             <div><h6>Добавить заказ на трансфер</h6></div>
             <br>
-            <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="flex mb-6">
               
-                <div class="w-full md:w-1/2 px-3">
+                <div class="w-full md:w-1/4 px-3">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                   Сап код
                 </label>
                 <input name="sap_kod" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
                 </div>
-                <div class="w-full md:w-1/2 px-3">
+                <div class="w-full md:w-1/4 px-3">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                     кол-во
                 </label>
                 <input name="how" value="1" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
                 </div>
-                <div class="w-full md:w-1/2 px-3">
+                <div class="w-full md:w-1/4 px-3">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                     Выбрать филиал
                 </label>
@@ -38,7 +39,7 @@
                     @endforeach
                   </select>
                 </div>
-                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
                       Примечание
                     </label>
@@ -51,7 +52,6 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table>
-                        <th class="p-2 pr-3">№</th>
                         <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['updated_at', 'asc'])}}">Обновлен</a></th>
                         <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['sap_kod', 'asc'])}}">Сап код</a></th>
                         <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['sapname', 'asc'])}}">Наименование</a></th>
@@ -62,9 +62,6 @@
                         <th class="p-2 pr-3"></th>
                         @foreach ($data1 as $item)
                             <tr>
-                                <td class="p-2 pr-3">
-                                    {{$loop->index+1}}
-                                </td>
                                 <td class="p-2 pr-3 text-xs">
                                     {{$item->updated_at}}
                                 </td>
@@ -111,5 +108,18 @@
                 </div>
             </div>
         </div>
+        @endsection
+        @section('countwait')
+            {{ $data4 }}
+        @endsection
+        @section('countvputi')
+            {{ $data5 }}
+        @endsection
+        @section('countdostavlen')
+            {{ $data6 }}
+        @endsection
+        @section('countprodaja')
+            {{ $data7 }}
+        @endsection
     </x-slot>
 </x-zavsklad.ojidaniye>

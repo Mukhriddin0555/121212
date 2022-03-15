@@ -1,5 +1,6 @@
 <x-zavsklad.ojidaniye>
     <x-slot name="header">
+        @section('session-start')
         <div class="py-2">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -68,5 +69,18 @@
                 </div>
             </div>
         </div>
+        @endsection
+        @section('countwait')
+            {{ $data4 }}
+        @endsection
+        @section('countvputi')
+            {{ $data5 }}
+        @endsection
+        @section('countdostavlen')
+            {{ $data6 }}
+        @endsection
+        @section('countprodaja')
+            {{ $data7 }}
+        @endsection
     </x-slot>
 </x-zavsklad.ojidaniye>

@@ -43,6 +43,12 @@ class me2n_Import implements ToModel
                 ->where('sap_kod', $rows[1])
                 ->where('how', $rows[2])
                 ->update(["status_id" => 3]);
+
+                $me2ncreate = new me2nImport();
+                $me2ncreate->sap = $rows[1];
+                $me2ncreate->postupleniye = $rows[4];
+                $me2ncreate->prihod = $rows[5];
+                $me2ncreate->save();
                 
                 }
                 if($me2n == 0){
@@ -66,16 +72,18 @@ class me2n_Import implements ToModel
                                     $wait->status_id = 3;
                                     $wait->save();
                                     $count -= $wait->how;
+
+                                    $me2ncreate = new me2nImport();
+                                    $me2ncreate->sap = $rows[1];
+                                    $me2ncreate->postupleniye = $rows[4];
+                                    $me2ncreate->prihod = $rows[5];
+                                    $me2ncreate->save();
                                 }
                             }
                         }
         
                     }
-                    $me2ncreate = new me2nImport();
-                    $me2ncreate->sap = $rows[1];
-                    $me2ncreate->postupleniye = $rows[4];
-                    $me2ncreate->prihod = $rows[5];
-                    $me2ncreate->save();
+                    
                 }
                     
             }
