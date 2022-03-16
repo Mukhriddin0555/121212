@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\WaitExport;
+use App\Imports\waitImport;
 use DateTime;
 use App\Models\status;
 use App\Models\waiting;
@@ -147,8 +148,11 @@ class branchController extends Controller
         ->where('waitings.id', $id)
         ->get();
         //$onewait = waiting::find($id);
-        
-        return view('zavsklad.onewait', ['data' => $onewait]);
+        $data2 = $this->counterVputi();
+        $data3 = $this->counterWait();
+        $data4 = $this->counterDostavlen();
+        $data5 = $this->counterProdaja();
+        return view('zavsklad.onewait', ['data' => $onewait, 'data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);
         //dd($onewait);
     }
     public function deleteOneWait($id, $routename)
@@ -191,11 +195,20 @@ class branchController extends Controller
     }
     public function addNewWait(Request $req)
     {   
-        $req->validate([
-            'crm_id' => ['required'],
-            'sap_kod' => ['required'],
-            'how' => ['required'],
-        ]); 
+        if($req->hasFile('waitimport'))
+        {
+            $file = $req->file('waitimport');
+            $result = Excel::import(new waitImport, $file);
+            return redirect()->route('zavsklad');
+        }
+        if(!$req->hasFile('waitimport')){
+            $req->validate([
+                'crm_id' => ['required'],
+                'sap_kod' => ['required'],
+                'how' => ['required'],
+            ]); 
+        }
+        
         $crmid = $req->crm_id;
         $date = $this->findDate($crmid);  
         $user = Auth::User()->id;
@@ -219,25 +232,24 @@ class branchController extends Controller
         if($this->validateDate($date)){
             $wait->save();
         }
+       
         return redirect()->route('zavsklad');
         
     }
     public function editOneWait($id)
     {   //бу функцияни обработка килиш кере  
         $wait = waiting::find($id);
-        $status = status::all();
+        $data2 = $this->counterWait();
+        $data3 = $this->counterVputi();
+        $data4 = $this->counterDostavlen();
+        $data5 = $this->counterProdaja();
         
-        return view('zavsklad.editonewait', ['data1' => $wait, 'data2' => $status]);
+        return view('zavsklad.editonewait', ['data1' => $wait, 'data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);
     }
     public function updateOneWait(Request $req, $id)
     {   //бу функцияни обработка килиш кере
         $wait = waiting::find($id);
         
-        $wait->crm_id = $req->crm_id;
-        $wait->sap_kod = $req->sap_kod;
-        $wait->how = $req->how;
-        $wait->order = $req->order;
-        $wait->status_id = $req->status;
         $wait->text = $req->text;
         $wait->save();
         return redirect()->route('allWait', ['crm_id', 'asc']);
@@ -447,17 +459,24 @@ class branchController extends Controller
         $search1 = $req->search;
         $search =  str_replace("*", "%", $search1);
         $data = waiting::where('crm_id', 'LIKE', "$search")->count();
-        if($data > 1){
-            $data1 = waiting::where('crm_id', 'LIKE', "$search")->get();
+        if($data > 0){
+            /*$data1 = waiting::where('crm_id', 'LIKE', "$search")->get();
             $data2 = $this->counterVputi();
             $data3 = $this->counterWait();
             $data4 = $this->counterDostavlen();
             $data5 = $this->counterProdaja();
-            return view('zavsklad.searchid', ['data1' => $data1, 'data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);
-        }
-        if($data == 1){
-            $data = waiting::where('crm_id', 'LIKE', "$search")->first();
-            return redirect()->route('oneWait', $data->id);
+            return view('zavsklad.searchid', ['data1' => $data1, 'data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);*/
+            $data1 = DB::table('waitings')
+            ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')
+            ->where('crm_id', 'LIKE', "$search")
+            ->select('warehouses.Kod', 'warehouses.name', 'waitings.*')
+            ->get();
+            $data2 = $this->counterVputi();
+            $data3 = $this->counterWait();
+            $data4 = $this->counterDostavlen();
+            $data5 = $this->counterProdaja();
+            
+            return view('zavsklad', ['data1' => $data1, 'data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);
             
         }
         if($data == 0){

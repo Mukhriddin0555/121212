@@ -1,0 +1,1 @@
+<a href={{ $docurl }} title="Подробнее"><img src="{{asset('storage/document_icon.png')}}"  alt="Подробнее" class="w-10 h-10"></a>

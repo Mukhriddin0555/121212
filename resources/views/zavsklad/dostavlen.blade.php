@@ -52,7 +52,7 @@
                                     {{$item->updated_at}}
                                 </td>
                                 <td class="p-1 pr-3">
-                                    {{$item->crm_id}}
+                                    <a href="{{ route('oneWait', $item->id)}}"><p class="underline decoration-solid text-blue-600">{{$item->crm_id}}</p></a>
                                 </td>
                                 <td class="p-1 pr-3">
                                     {{$item->sap_kod}}

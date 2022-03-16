@@ -21,5 +21,6 @@ class waiting extends Model
     public function status(){
         return $this->belongsTo(status::class);
     }
+    
 
 }
