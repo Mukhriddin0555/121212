@@ -41,8 +41,8 @@ class waitImport implements ToModel
                 $wait->warehouse_id = $sklad_id->id;
                 $wait->status_id = 1;           
                 $wait->order = $row[3];
-                //$wait->save();
-                dd($wait);
+                $wait->save();
+                //dd($wait);
                 }
                 if(strlen($row[0]) == 11){
                 $crm_id = 0 . $row[0];
