@@ -36,6 +36,7 @@ class waitImport implements ToModel
                 $crm_id = $row[0];
                 $wait->crm_id = $crm_id;
                 $wait->data = $date;
+                    dd($wait->crm_id);
                 }
                 if(strlen($row[0]) == 11){
                 $crm_id = 0 . $row[0];
