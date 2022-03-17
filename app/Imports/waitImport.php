@@ -36,21 +36,28 @@ class waitImport implements ToModel
                 $crm_id = $row[0];
                 $wait->crm_id = $crm_id;
                 $wait->data = $date;
-                    dd($wait->crm_id);
+                $wait->sap_kod = $row[1];
+                $wait->how = $row[2];
+                $wait->warehouse_id = $sklad_id->id;
+                $wait->status_id = 1;           
+                $wait->order = $row[3];
+                //$wait->save();
+                dd($wait);
                 }
                 if(strlen($row[0]) == 11){
                 $crm_id = 0 . $row[0];
                 $date = $this->findDate($crm_id);
                 $wait->crm_id = $crm_id;
                 $wait->data = $date;
-                }
-            
                 $wait->sap_kod = $row[1];
                 $wait->how = $row[2];
                 $wait->warehouse_id = $sklad_id->id;
                 $wait->status_id = 1;           
                 $wait->order = $row[3];
                 $wait->save();
+                }
+            
+                
 
             }
             
