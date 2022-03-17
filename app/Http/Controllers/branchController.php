@@ -460,12 +460,6 @@ class branchController extends Controller
         $search =  str_replace("*", "%", $search1);
         $data = waiting::where('crm_id', 'LIKE', "$search")->count();
         if($data > 0){
-            /*$data1 = waiting::where('crm_id', 'LIKE', "$search")->get();
-            $data2 = $this->counterVputi();
-            $data3 = $this->counterWait();
-            $data4 = $this->counterDostavlen();
-            $data5 = $this->counterProdaja();
-            return view('zavsklad.searchid', ['data1' => $data1, 'data2' => $data2, 'data3' => $data3, 'data4' => $data4, 'data5' => $data5]);*/
             $data1 = DB::table('waitings')
             ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')
             ->where('crm_id', 'LIKE', "$search")

@@ -26,9 +26,9 @@ class waitImport implements ToModel
         if($row[0] != null && $row[1] != null && $row[2] != null && $row[3] != null){
             if($row[0] != 'id'){
                 $user = Auth::User()->id;
-            $sklad_id = DB::table('warehouses')
-            ->where('user_id', $user)
-            ->first();
+                $sklad_id = DB::table('warehouses')
+                ->where('user_id', $user)
+                ->first();
 
             $wait = new waiting();
             if(strlen($row[0]) == 12){

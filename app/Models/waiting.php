@@ -13,7 +13,7 @@ class waiting extends Model
     use HasFactory;
 
     public function sklad(){
-        return $this->belongsTo(warehouse::class);
+        return $this->belongsTo(warehouse::class, 'warehouse_id', 'id');
     }
     public function sapkod(){
         return $this->belongsTo(sparepart::class);
