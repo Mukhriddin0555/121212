@@ -30,25 +30,26 @@ class waitImport implements ToModel
                 ->where('user_id', $user)
                 ->first();
 
-            $wait = new waiting();
-            if(strlen($row[0]) == 12){
+                $wait = new waiting();
+                if(strlen($row[0]) == 12){
                 $date = $this->findDate($row[0]);
-                $wait->crm_id = $row[0];
+                $crm_id = $row[0];
+                $wait->crm_id = $crm_id;
                 $wait->data = $date;
-            }
-            if(strlen($row[0]) == 11){
+                }
+                if(strlen($row[0]) == 11){
                 $crm_id = 0 . $row[0];
                 $date = $this->findDate($crm_id);
                 $wait->crm_id = $crm_id;
                 $wait->data = $date;
-            }
+                }
             
-            $wait->sap_kod = $row[1];
-            $wait->how = $row[2];
-            $wait->warehouse_id = $sklad_id->id;
-            $wait->status_id = 1;           
-            $wait->order = $row[3];
-            $wait->save();
+                $wait->sap_kod = $row[1];
+                $wait->how = $row[2];
+                $wait->warehouse_id = $sklad_id->id;
+                $wait->status_id = 1;           
+                $wait->order = $row[3];
+                $wait->save();
 
             }
             
