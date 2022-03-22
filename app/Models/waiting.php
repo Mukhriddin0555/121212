@@ -12,6 +12,8 @@ class waiting extends Model
 {
     use HasFactory;
 
+    protected $fillable = array('crm_id', 'data', 'sap_kod', 'how', 'warehouse_id', 'status_id', 'order');
+
     public function sklad(){
         return $this->belongsTo(warehouse::class, 'warehouse_id', 'id');
     }
