@@ -36,17 +36,11 @@
                         <th class="p-1 pr-3"><a href="{{ route('dostavlen', ['data', 'asc'])}}">Дата поставки</a></th>
                         <th class="p-1 pr-3"><a href="{{ route('dostavlen', ['crm_id', 'asc'])}}">CRM ID</a></th>
                         <th class="p-1 pr-3"><a href="{{ route('dostavlen', ['sap_kod', 'asc'])}}">Сап код</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('dostavlen', ['sapname', 'asc'])}}">Наименование</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('dostavlen', ['name', 'asc'])}}">Наименование</a></th>
                         <th class="p-1 pr-3"><a href="{{ route('dostavlen', ['how', 'asc'])}}">шт</a></th>
                         <th class="p-1 pr-3"></th>   
                         <th class="p-1 pr-3"></th>
-                        @php
-                            $count = 0;
-                        @endphp
-                        @foreach ($data1 as $item)
-                            @php
-                                $count++;
-                            @endphp
+                        @foreach ($allwait as $item)
                             <tr>
                                 <td class="p-1 pr-3">
                                     {{$item->updated_at}}
@@ -55,10 +49,10 @@
                                     <a href="{{ route('oneWait', $item->id)}}"><p class="underline decoration-solid text-blue-600">{{$item->crm_id}}</p></a>
                                 </td>
                                 <td class="p-1 pr-3">
-                                    {{$item->sap_kod}}
+                                    {{$item->sapkod->sap_kod}}
                                 </td>
                                 <td class="p-1 pr-3 text-xs">
-                                    {{$item->sapname}}
+                                    {{$item->sapkod->name}}
                                 </td>
                                 <td class="p-1 pr-3">
                                     {{$item->how}}
@@ -86,18 +80,11 @@
         </div>
         
         @endsection
-        @section('countwait')
-            {{ $data3 }}
-        @endsection
-        @section('countvputi')
-            {{ $data4 }}
-        @endsection
-        @section('countdostavlen')
-            {{ $count }}
-        @endsection
-        @section('countprodaja')
-            {{ $data5 }}
-        @endsection
+        @foreach ($count as $item => $value)
+                @section($item)
+                    {{ $value }}
+                @endsection
+        @endforeach
         
         
     </x-slot>

@@ -5,19 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\ress;
 use App\Models\role;
 use App\Models\User;
-use App\Models\answer;
 use App\Models\status;
 use App\Models\answaer;
-use App\Models\Counter;
 use App\Models\sparepart;
 use App\Models\warehouse;
-use App\Models\HowToModel;
-use App\Models\me2nImport;
 use App\Imports\me2n_Import;
 use App\Imports\SpareImport;
 use Illuminate\Http\Request;
 use App\Exports\SparePartExport;
-use App\Imports\SparePartImport;
 use App\Imports\HowToModelImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -41,39 +36,33 @@ class adminController extends Controller
         }
     }
     //Обработка пользователей
-    public function allUsers($column, $sort)
+    /**
+     * @param $column 'surname'
+     * @param $sort 'asc'
+     * @return User model
+     */
+    public function allUsers($column = 'surname', $sort = 'asc')
     {
-        $users = DB::table('users')
-        ->join('roles', 'users.role_id', '=', 'roles.id')
-        ->orderBy($column, $sort)
-        ->select('users.*', 'roles.role')
-        ->get();
+        $users = User::with('role')->orderBy($column, $sort)->get();
         return view('user.allUser', ['data' => $users]);
-        
+        //dd($users);
               
     }
     public function oneUser($id)
     {
-        //$user = User::all()->where($id)->get();
-        $users = User::all();
-        
+        $users = User::find($id);
+        return view('user.oneUser', ['data' => $users]);
 
-        $user = $users->find($id);
-        //кайси регионларга караши
-        //$role = $this->findRole($id);
-        
-        return view('user.oneUser', ['data' => $user]);
-        //dd($role);
     }
     public function deleteOneUser($id)
     {
-        $user = User::findorfail($id);
-        $user->delete();
+        User::findorfail($id)->delete();
         return redirect()->route('allUsers', ['surname', 'asc']);
     }
     public function newUser()
     {        
-        $role = role::all();
+        $role = role::where('role', '!=', 'admin')->get();
+        
         return view('user.newUser', ['data' => $role]);
     }
     public function addNewUser(Request $req)
@@ -118,92 +107,58 @@ class adminController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],
             'number' => ['required'],
             'order' => ['required'],
-            'role_id' => ['required'],
-            'password' => ['required'],
         ]);
         $user->surname = $req->surname;
         $user->lastname = $req->lastname;
         $user->number = $req->number;
         $user->order = $req->order;
-        $user->role_id = $req->role_id;
         $user->email = $req->email;
-        $user->password = Hash::make($req->password);
         $user->save();
         return redirect()->route('allUsers', ['surname', 'asc']);
         //dd($req);
     }
 
     //-------------------------обработка филиалов
-    public function allBranchs($column, $sort)
+
+    /**
+     * @param $column default kod
+     * @param $sort default asc
+     * @return view('branch.allBranchs', ['data' => $branch])
+     */
+    public function allBranchs($column = 'kod', $sort = 'asc')
     {
-        //$branch = warehouse::all();
-        
-        $branch = DB::table('warehouses')
-        ->leftJoin('users as zavsklad', 'warehouses.user_id', '=', 'zavsklad.id')
-        ->leftJoin('users as manager', 'warehouses.manager_id', '=', 'manager.id')
-        ->leftJoin('users as filialmanager', 'warehouses.branchmanager_id', '=', 'filialmanager.id')
-        ->select(
-            'warehouses.*', 
-            'zavsklad.surname as zavskladsurname',
-            'zavsklad.lastname as zavskladlastname', 
-            'manager.surname as managersurname',
-            'manager.lastname as managerlastname',
-            'filialmanager.surname as filialmanagersurname',
-            'filialmanager.lastname as filialmanagerlastname'
-            )
-        ->orderBy($column, $sort)
-        ->get();
+        $branch = warehouse::with('user')->with('managername')->with('branchmanager')->orderBy($column, $sort)->get();
         return view('branch.allBranchs', ['data' => $branch]);
-        //->join('roles', 'users.role_id', '=', 'roles.id')
-        //->orderBy($column, $sort)->get();
-        //$ss = Request::path();
-        //dd($ss);
+        
     }
     public function oneBranch($id)
-    {
+    {   
         $branch = warehouse::findorfail($id);
-        $connected = DB::table('resses')
-        ->join('users', 'resses.user_id', '=', 'users.id')
-        ->select('users.surname', 'users.lastname','resses.*')
-        ->where('warehouse_id', $id)
-        ->get();  
-        $ressepshn = DB::table('roles')
-        ->join('users', 'roles.id', '=', 'users.role_id')
-        ->where('role', 'resseption')
-        ->get(); 
+        $connected = ress::where('warehouse_id', $id)->with('connecteduser')->get(); 
+        $ressepshn = role::where('role', 'resseption')->with('resseption')->first()->resseption;
+        
         return view('branch.oneBranch', ['data' => $branch, 'data1' => $connected,'data2' => $ressepshn]);
-        //dd($connected);
+        
+        
     }
     public function deleteOneBranch($id)
     {
-        $branch = warehouse::findorfail($id);
-        $connected = DB::table('resses')->where('warehouse_id', $id)->get();
-        foreach ($connected as $value) {
-            $delete = $value->id;
-            $res = ress::findorfail($delete);
-            $res->delete();
-          }
-        $branch->delete();
+        warehouse::findorfail($id)->delete();
+        if(ress::where('warehouse_id', $id)->count() > 0){
+            foreach (ress::where('warehouse_id', $id)->get() as $value) {
+                User::where('id', ress::find($value->id)->user_id)->update(['active' => 0]);
+                ress::find($value->id)->delete();
+              }
+        }
         return redirect()->route('allBranchs', ['Kod', 'asc']);
-        //dd($connected);
     }
     public function newBranch()
     {
-        $manager = DB::table('roles')
-        ->join('users', 'roles.id', '=', 'users.role_id')
-        ->where('role', 'manager')
-        ->get();
-        $zavsklad = DB::table('roles')
-        ->join('users', 'roles.id', '=', 'users.role_id')
-        ->where('role', 'zavsklad')
-        ->get();
-        $branchmanager = DB::table('roles')
-        ->join('users', 'roles.id', '=', 'users.role_id')
-        ->where('role', 'branchmanager')
-        ->get();
+        $manager = role::where('role', 'manager')->with('userall')->first();
+        $zavsklad = role::where('role', 'zavsklad')->with('userall')->first();
+        $branchmanager = role::where('role', 'branchfilmanager')->with('userall')->first();
 
         return view('branch.newBranch', ['data1' => $manager, 'data2' => $zavsklad, 'data3' => $branchmanager]);
-        //dd($zavsklad);
     }
     public function addNewBranch(Request $req)
     {
@@ -225,25 +180,17 @@ class adminController extends Controller
         $branch->adress = $req->adress;
         $branch->location = $req->location;
         $branch->save();
+        User::where('id', $req->upr_id)->update(['active' => 1]);
+        User::where('id', $req->user_id)->update(['active' => 1]);
+
         return redirect()->route('allBranchs', ['Kod', 'asc']);
     }
     public function editOneBranch($id)
     {
-        //гет
-        $branch = warehouse::findorfail($id);
-        $manager = DB::table('roles')
-        ->join('users', 'roles.id', '=', 'users.role_id')
-        ->where('role', 'manager')
-        ->get();
-        $zavsklad = DB::table('roles')
-        ->join('users', 'roles.id', '=', 'users.role_id')
-        ->where('role', 'zavsklad')
-        ->get();
-        $branchmanager = DB::table('roles')
-        ->join('users', 'roles.id', '=', 'users.role_id')
-        ->where('role', 'branchfilmanager')
-        ->get();
-        //dd($branchmanager);
+        $branch = warehouse::where('id', $id)->with('user')->with('managername')->with('branchmanager')->first();
+        $manager = role::where('role', 'manager')->with('userall')->first();
+        $zavsklad = role::where('role', 'zavsklad')->with('userall')->first();
+        $branchmanager = role::where('role', 'branchfilmanager')->with('userall')->first();
         return view('branch.editOneBranch', ['data1' => $manager, 'data2' => $zavsklad, 'data3' => $branch, 'data4' => $branchmanager]);
     }
     public function updateOneBranch(Request $req, $id)
@@ -258,7 +205,14 @@ class adminController extends Controller
             'adress' => ['required'],
             'location' => ['required'],
         ]);
-        
+        if($branch->user_id != $req->user_id){
+            User::where('id', $branch->user_id)->update(['active' => 0]);
+            User::where('id', $req->user_id)->update(['active' => 1]);
+        }
+        if($branch->branchmanager_id != $req->upr_id){
+            User::where('id', $branch->branchmanager_id)->update(['active' => 0]);
+            User::where('id', $req->upr_id)->update(['active' => 1]);
+        }
         $branch->Kod = $req->Kod;
         $branch->name = $req->name;
         $branch->user_id = $req->user_id;
@@ -274,19 +228,25 @@ class adminController extends Controller
         $req->validate([            
             'user_id' => ['unique:resses'],
         ]);
+        User::where('id', $req->user_id)->update(['active' => 1]);
+
         $ressepshn = new ress();
         $ressepshn->warehouse_id = $id;
         $ressepshn->user_id = $req->user_id;
         $ressepshn->save();
+
         return redirect()->route('oneBranch', $id);
+        
     }
 
     public function deleteUserBranch($id)
-    {
-        $ressepshn = ress::findorfail($id);
-        $onebranch = $ressepshn->warehouse_id;
-        $ressepshn->delete();
+    {   
+        User::where('id', ress::find($id)->user_id)->update(['active' => 0]);
+        $onebranch = ress::findorfail($id)->warehouse_id;
+        ress::findorfail($id)->delete();
+
         return redirect()->route('oneBranch', $onebranch);
+        
     }
     //обработка статусов и ответов смотреть добавить удалить
     public function allStatus()
@@ -302,8 +262,7 @@ class adminController extends Controller
     }
     public function deleteStatus($id)
     {
-        $status = status::findorfail($id);
-        $status->delete();
+        status::findorfail($id)->delete();
         return redirect()->route('allStatus');
     }
     public function addStatus(Request $req)
@@ -325,8 +284,7 @@ class adminController extends Controller
     }
     public function deleteCallBack($id)
     {
-        $status = answaer::findorfail($id);
-        $status->delete();
+        answaer::findorfail($id)->delete();
         return redirect()->route('allCallBack');
     }
     public function addCallBack(Request $req)
@@ -380,8 +338,7 @@ class adminController extends Controller
 
     public function deleteSparePart($sap)
     {
-        $spare = sparepart::where('sap_kod', $sap);
-        $spare->delete();
+        sparepart::where('sap_kod', $sap)->delete();
         return redirect()->route('sparePart');
     }
 
@@ -401,8 +358,7 @@ class adminController extends Controller
         }
         if($req->hasFile('import'))
         {
-            $file = $req->file('import');
-            $result = Excel::import(new SpareImport, $file);
+            $result = Excel::import(new SpareImport, $req->file('import'));
             return redirect()->route('sparePart');
         }
         return redirect()->route('sparePart');
@@ -410,16 +366,12 @@ class adminController extends Controller
 
     public function modelImport(Request $req) 
     {
-        $file = $req->file('modelimport');
-        $result = Excel::import(new HowToModelImport, $file);
-        
+        $result = Excel::import(new HowToModelImport, $req->file('modelimport'));
         return redirect()->route('sparePart');
     }
     public function importMe2n(Request $req) 
     {
-        $file = $req->file('me2nimport');
-        $new_status = Excel::import(new me2n_Import, $file);
-
+        $new_status = Excel::import(new me2n_Import, $req->file('me2nimport'));
         return redirect()->route('sparePart')->with('succecc', 'успешно обновлено');
     }
 

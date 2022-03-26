@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\resseptionOrders;
+use App\Models\sparepart;
 use Illuminate\Http\Request;
+use App\Models\resseptionOrders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,17 +36,10 @@ class resseptionController extends Controller
         return view('resseption', ['data2' => $data2, 'data3' => $data3]);
     }
     
-    public function ressepshnOrders($status, $column, $sort)
+    public function ressepshnOrders($status, $column = 'crm_id')
     {   
         $user = Auth::User()->id;
-        $data = DB::table('resseption_orders')
-        ->leftJoin('spareparts', 'resseption_orders.sap_kod', '=', 'spareparts.sap_kod')        
-        ->join('statuses', 'resseption_orders.status_id', '=', 'statuses.id')
-        ->select('resseption_orders.*', 'spareparts.name as sapname','statuses.name as statusname')
-        ->where('user_id', $user)
-        ->where('status_id', $status)
-        ->orderBy($column, $sort)
-        ->get();
+        $data = resseptionOrders::where('user_id', $user)->where('status_id', $status)->with('status')->with('sapkod')->get()->sortBy($column);
         $data2 = $this->counterwait();
         $data3 = $this->counterdostavlen();
 
@@ -61,6 +55,8 @@ class resseptionController extends Controller
             'how' => ['required'],
         ]);
         //нужно в инпуте crm_id sap_kod how
+        $sparepart_id = sparepart::firstOrCreate(['sap_kod' => $req->sap_kod],['name' => 'Не найден']);
+        
         $user = Auth::User()->id;
         $ress = DB::table('resses')
         ->where('user_id', $user)
@@ -68,7 +64,7 @@ class resseptionController extends Controller
         $ress = $ress[0]->warehouse_id;
         $order = new resseptionOrders();
         $order->crm_id = $req->crm_id;
-        $order->sap_kod = $req->sap_kod;
+        $order->sparepart_id = $sparepart_id->id;
         $order->how = $req->how;
         $order->order = "Еще не заказано";
         $order->warehouse_id = $ress;
@@ -77,5 +73,9 @@ class resseptionController extends Controller
         $order->save();
         return redirect()->route('resseption');
         
+    }
+    public function orderDelete($id){
+        resseptionOrders::find($id)->delete();
+        return back();
     }
 }

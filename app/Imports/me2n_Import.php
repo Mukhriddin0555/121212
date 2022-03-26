@@ -87,19 +87,6 @@ class me2n_Import implements ToModel
                 }
                     
             }
-            if($rows[5] != 'net'){
-                $delete = me2nImport::where('sap', $rows[1])
-                ->where('postupleniye', $rows[4])->first();
-                if($delete != null){
-                    $delete->delete();
-                }
-                
-            }
-            
-                
-                
-            
-            
         }
     }
 }

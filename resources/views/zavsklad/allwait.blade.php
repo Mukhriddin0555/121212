@@ -23,23 +23,17 @@
             <div class="max-w-7xl ml-2 mx-auto sm:px-6>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table class="flex justify-center my-3.5">
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['data', 'asc'])}}">Дата ID</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['crm_id', 'asc'])}}">CRM ID</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['sap_kod', 'asc'])}}">Сап код</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['sapname', 'asc'])}}">Наименование</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['how', 'asc'])}}">шт</a></th>
-                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['order', 'asc'])}}">Заказ</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['data'])}}">Дата ID</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['crm_id'])}}">CRM ID</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['sap_kod'])}}">Сап код</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['name'])}}">Наименование</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['how'])}}">шт</a></th>
+                        <th class="p-1 pr-3"><a href="{{ route('allWait', ['order'])}}">Заказ</a></th>
                         <th class="p-1 pr-3"></th>   
                         <th class="p-1 pr-3"></th>
                         <th class="p-1 pr-3"></th>
                         <th class="p-1 pr-3">Длит.</th>
-                        @php
-                            $count = 0;
-                        @endphp
-                        @foreach ($data1 as $item)
-                            @php
-                                $count++;
-                            @endphp
+                        @foreach ($allwait as $item)
                             <tr>
                                 <td class="p-1 pr-3">
                                     {{$item->data}}
@@ -48,10 +42,10 @@
                                     <a href="{{ route('oneWait', $item->id)}}"><p class="underline decoration-solid text-blue-600">{{$item->crm_id}}</p></a>
                                 </td>
                                 <td class="p-1 pr-3">
-                                    {{$item->sap_kod}}
+                                    {{$item->sapkod->sap_kod}}
                                 </td>
                                 <td class="p-1 pr-3 text-xs">
-                                    {{$item->sapname}}
+                                    {{$item->sapkod->name}}
                                 </td>
                                 <td class="p-1 pr-3">
                                     {{$item->how}}
@@ -95,18 +89,11 @@
         </div>
         
         @endsection
-        @section('countwait')
-            {{ $count }}
-        @endsection
-        @section('countvputi')
-            {{ $data3 }}
-        @endsection
-        @section('countdostavlen')
-            {{ $data4 }}
-        @endsection
-        @section('countprodaja')
-            {{ $data5 }}
-        @endsection
+        @foreach ($count as $item => $value)
+                @section($item)
+                    {{ $value }}
+                @endsection
+        @endforeach
         
     </x-slot>
 </x-zavsklad.ojidaniye>

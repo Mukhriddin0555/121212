@@ -20,10 +20,10 @@
                                     {{$item->crm_id}}
                                 </td>
                                 <td class="p-2 pr-3">
-                                    {{$item->sap_kod}}
+                                    {{$item->sapkod->sap_kod}}
                                 </td>
                                 <td class="p-2 pr-3 text-xs">
-                                    {{$item->sapname}}
+                                    {{$item->sapkod->name}}
                                 </td>
                                 <td class="p-2 pr-3">
                                     {{$item->how}}
@@ -33,7 +33,7 @@
                                     
                                     <form action="{{ route('oneWaitOrder', $item->id )}}" method="GET">
                                         <td class="p-2 pr-3">
-                                        <input name="order" type="text" placeholder="{{$item->order}}">
+                                        <input class="w-32" name="order" type="text" placeholder="{{$item->order}}">
                                         </td>
                                         <td class="p-2 pr-3">
                                             <button type="submit"><img src="{{asset('storage/save_icon2.png')}}"  alt="Сохранить" class="w-4 h-4"></button>
@@ -48,7 +48,7 @@
                                     @endif
                                 
                                 <td class="p-2 pr-3">
-                                    {{$item->statusname}}
+                                    {{$item->status->name}}
                                 </td>
                                 <th class="p-2 pr-3">
                                     <a href="{{ route('deliveredOneWaitOrder', $item->id)}}" title="Доставлено"><img src="{{asset('storage/dostavlen.png')}}"  alt="Доставлен" class="w-4 h-4"></a>
@@ -63,18 +63,11 @@
             </div>
         </div>
         @endsection
-        @section('countwait')
-            {{ $data2 }}
-        @endsection
-        @section('countvputi')
-            {{ $data3 }}
-        @endsection
-        @section('countdostavlen')
-            {{ $data4 }}
-        @endsection
-        @section('countprodaja')
-            {{ $data5 }}
-        @endsection
+        @foreach ($count as $item => $value)
+                @section($item)
+                    {{ $value }}
+                @endsection
+        @endforeach
         
     </x-slot>
 </x-zavsklad.ojidaniye>

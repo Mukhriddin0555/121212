@@ -19,7 +19,7 @@ class CreateResseptionOrdersTable extends Migration
         Schema::create('resseption_orders', function (Blueprint $table) {
             $table->id();
             $table->string('crm_id');
-            $table->string('sap_kod');
+            $table->foreignIdFor(sparepart::class);
             $table->integer('how');
             $table->string('order');
             $table->foreignIdFor(warehouse::class);            

@@ -23,23 +23,23 @@
                                     {{$item->name}}
                                 </td>
                                 <td class="p-2 pr-7">
-                                    @if ($item->zavskladsurname && $item->zavskladlastname)
-                                    {{$item->zavskladsurname}} {{$item->zavskladlastname}}
+                                    @if ($item->user != null)
+                                    {{$item->user->surname}} {{$item->user->lastname}}
                                     @else
                                     зав. склад не привязан
                                     @endif
                                 </td>
                                 <td class="p-2 pr-7">
-                                    @if ($item->filialmanagersurname && $item->filialmanagerlastname)
-                                    {{$item->filialmanagersurname}} {{$item->filialmanagerlastname}}
+                                    @if ($item->branchmanager != null)
+                                    {{$item->branchmanager->surname}} {{$item->branchmanager->lastname}}
                                     @else
                                      упр филиала не привязан
                                     @endif
                                     
                                 </td>
                                 <td class="p-2 pr-7">
-                                    @if ($item->managersurname && $item->managerlastname)
-                                    {{$item->managersurname}} {{$item->managerlastname}}
+                                    @if ($item->managername != null)
+                                    {{$item->managername->surname}} {{$item->managername->lastname}}
                                     @else
                                      Менеджер не привязан
                                     @endif

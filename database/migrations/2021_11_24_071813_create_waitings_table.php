@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\sparepart;
 use App\Models\status;
 use App\Models\warehouse;
 use Illuminate\Database\Migrations\Migration;
@@ -19,7 +20,7 @@ class CreateWaitingsTable extends Migration
             $table->id();
             $table->string('data');
             $table->string('crm_id');
-            $table->string('sap_kod');
+            $table->foreignIdFor(sparepart::class);
             $table->integer('how');
             $table->string('order');
             $table->foreignIdFor(warehouse::class);

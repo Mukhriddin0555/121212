@@ -11,7 +11,7 @@
         @endforeach
         @endif
         @section('session-start')
-        <form class="w-full max-w-lg m-5" action="{{ route('updateOneWait', $data1->id)}}" method="post" enctype="multipart/form-data">
+        <form class="w-full max-w-lg m-5" action="{{ route('updateOneWait', $wait->id)}}" method="post" enctype="multipart/form-data">
           @csrf
           <div class="flex md:w-3/4 mb-6">
             <div class="w-full  p-6 bg-white border rounded border-gray-200">
@@ -21,31 +21,24 @@
                       Id
                     </label>
                     <div name="surname" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-1 px-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text">
-                      {{$data1->crm_id}}
+                      {{$wait->crm_id}}
                     </div>
                   </div>
                   <div class="w-full px-3">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
                       Примечание
                     </label>
-                    <input name="text" value="{{$data1->text}}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                    <input name="text" value="{{$wait->text}}" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                     <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
                   </div>          
               </div>
           <br><button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
         </form>
         @endsection
-        @section('countwait')
-            {{ $data2 }}
-        @endsection
-        @section('countvputi')
-            {{ $data3 }}
-        @endsection
-        @section('countdostavlen')
-            {{ $data4 }}
-        @endsection
-        @section('countprodaja')
-            {{ $data5 }}
-        @endsection
+        @foreach ($count as $item => $value)
+                @section($item)
+                    {{ $value }}
+                @endsection
+        @endforeach
     </x-slot>
 </x-zavsklad.ojidaniye>
