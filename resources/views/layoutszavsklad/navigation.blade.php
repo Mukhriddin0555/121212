@@ -41,7 +41,7 @@
               </li>
               <li class="my-px">
                 <a
-                  href="{{route('allWait', ['crm_id', 'asc'])}}"
+                  href="{{route('allWait', ['crm_id'])}}"
                   class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
                   <span class="flex items-center justify-center text-lg text-gray-400">
@@ -67,7 +67,7 @@
               </li>
               <li class="my-px">
                 <a
-                  href="{{route('vputi', ['crm_id', 'asc'])}}"
+                  href="{{route('vputi', ['crm_id'])}}"
                   class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
                   <span class="flex items-center justify-center text-lg text-gray-400">
@@ -93,7 +93,7 @@
               </li>
               <li class="my-px">
                 <a
-                  href="{{route('dostavlen', ['crm_id', 'asc'])}}"
+                  href="{{route('dostavlen', ['crm_id'])}}"
                   class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
                   <span class="flex items-center justify-center text-lg text-gray-400">
@@ -123,7 +123,7 @@
               </li>
               <li class="my-px">
                 <a
-                  href="{{route('allWaitOrder', ['statusname', 'desc'])}}"
+                  href="{{route('allWaitOrder', ['statusname'])}}"
                   class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
                   <span class="flex items-center justify-center text-lg text-gray-400">

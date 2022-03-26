@@ -33,7 +33,7 @@ class waitImport implements ToModel
                 $wait = new waiting();
                 if(strlen($row[0]) == 12){
                 $date = $this->findDate($row[0]);
-                $crm_id = $row[0];
+                $crm_id = strval($row[0]);
                 $wait->crm_id = $crm_id;
                 $wait->data = $date;
                 $wait->sap_kod = $row[1];

@@ -53,9 +53,13 @@
                   </label>
                   <div class="relative">
                     <select name="manager_id" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                      @foreach ($data1 as $data)
-                          <option value="{{ $data->id}}">{{ $data->surname}} {{ $data->lastname}}</option>
-                      @endforeach
+                      @if (isset($data1->userall))
+                        @foreach ($data1->userall as $data)
+                          @if ($data->active == 0)
+                            <option value="{{ $data->id}}">{{ $data->surname}} {{ $data->lastname}}</option>
+                          @endif
+                        @endforeach
+                      @endif
                     </select>
                   </div>
                 </div>              
@@ -66,10 +70,14 @@
                     Упр. филиала
                   </label>
                   <div class="relative">
-                    <select name="upr_id" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                      @foreach ($data3 as $data)
-                          <option value="{{ $data->id}}">{{ $data->surname}}  {{ $data->lastname}}</option>
-                      @endforeach
+                    <select name="manager_id" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                      @if (isset($data3->userall))
+                        @foreach ($data3->userall as $data)
+                          @if ($data->active == 0)
+                          <option value="{{ $data->id}}">{{ $data->surname}} {{ $data->lastname}}</option>
+                          @endif
+                        @endforeach
+                      @endif
                     </select>
                   </div>
                 </div>              
@@ -81,9 +89,13 @@
                 </label>
                 <div class="relative">
                   <select name="user_id" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                    @foreach ($data2 as $data)
-                        <option value="{{ $data->id}}">{{ $data->surname}}  {{ $data->lastname}}</option>
-                    @endforeach
+                    @if (isset($data2->userall))
+                        @foreach ($data2->userall as $data)
+                          @if ($data->active == 0)
+                            <option value="{{ $data->id}}">{{ $data->surname}} {{ $data->lastname}}</option>
+                          @endif
+                        @endforeach
+                    @endif
                   </select>
                 </div>
               </div>              

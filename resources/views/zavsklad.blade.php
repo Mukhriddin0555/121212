@@ -3,7 +3,19 @@
         @section('session-start')
         @if (session('errorid'))
                             <div class="flex justify-center ">
-                                <div class="w-1/2 font-black bg-red-400 rounded m-5">{{ session('errorid') }}
+                                <div class="w-1/2 font-black bg-red-400 rounded m-5 text-center">{{ session('errorid') }}
+                                </div>
+                            </div>
+        @endif
+        @if (session('errordateid'))
+                            <div class="flex justify-center">
+                                <div class="w-1/2 font-black bg-red-400 rounded m-5 text-center">{{ session('errordateid') }}
+                                </div>
+                            </div>
+        @endif
+        @if (session('success'))
+                            <div class="flex justify-center">
+                                <div class="w-1/2 font-black bg-green-300 rounded m-5 text-center">{{ session('success') }}
                                 </div>
                             </div>
         @endif
@@ -42,17 +54,11 @@
         @endif
         @include('zavsklad.forminorder')
         @endsection
-        @section('countwait')
-            {{ $data3 }}
-        @endsection
-        @section('countvputi')
-            {{ $data2 }}
-        @endsection
-        @section('countdostavlen')
-            {{ $data4 }}
-        @endsection
-        @section('countprodaja')
-            {{ $data5 }}
-        @endsection
+        @foreach ($count as $item => $value)
+                @section($item)
+                    {{ $value }}
+                @endsection
+        @endforeach
+        
     </x-slot>
 </x-zavsklad.ojidaniye>

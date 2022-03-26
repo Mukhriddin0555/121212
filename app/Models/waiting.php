@@ -18,7 +18,7 @@ class waiting extends Model
         return $this->belongsTo(warehouse::class, 'warehouse_id', 'id');
     }
     public function sapkod(){
-        return $this->belongsTo(sparepart::class);
+        return $this->belongsTo(sparepart::class, 'sparepart_id', 'id');
     }
     public function status(){
         return $this->belongsTo(status::class);

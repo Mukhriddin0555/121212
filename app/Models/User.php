@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+    public $with = 'sklad';
 
     /**
      * The attributes that should be hidden for serialization.

@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class role extends Model
 {
     use HasFactory;
+
+    public function resseption(){
+        return $this->hasMany(User::class);
+    }
+    public function userall(){
+        return $this->hasMany(User::class);
+    }
 }

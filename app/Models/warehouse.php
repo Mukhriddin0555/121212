@@ -21,4 +21,6 @@ class warehouse extends Model
     {
         return $this->belongsTo(User::class, 'branchmanager_id');
     }
+
+    
 }

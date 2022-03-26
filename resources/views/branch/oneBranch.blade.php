@@ -109,7 +109,7 @@
                         @foreach ($data1 as $connected)
                         <div class="flex justify center m-1 block tracking-wide text-xs mb-2">
                           <div name="location" class="appearance-none block md:w-1/2 bg-gray-200 text-gray-700 border border-gray-200 rounded m-1 py-1 px-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text">
-                            {{$connected->surname}} {{$connected->lastname}} 
+                            {{$connected->connecteduser->surname}} {{$connected->connecteduser->lastname}} 
                           </div>
                           <button class="font-bold text-white no-underline rounded p-2 bg-green-400 shadow-sm m-1 duration-200 transition ease-in-out duration-150 hover:bg-green-600 active:bg-green-700 ">
                             <a href="{{ route('deleteUserBranch', $connected->id)}}">Удалить</a>
@@ -128,8 +128,10 @@
                         <div class="flex justify center m-1 block tracking-wide text-xs mb-2">
                           <div class="relative">
                             <select name="user_id" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                              @foreach ($data2 as $resseption)
-                                  <option value="{{ $resseption->id}}">{{ $resseption->surname}} {{ $resseption->lastname}}</option>
+                              @foreach ($data2 as $resseption1)
+                                @if ($resseption1->active == 0)
+                                <option value="{{ $resseption1->id}}">{{ $resseption1->surname}} {{ $resseption1->lastname}}</option>
+                                @endif    
                               @endforeach
                             </select>
                           </div>

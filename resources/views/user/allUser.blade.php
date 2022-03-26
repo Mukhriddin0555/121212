@@ -25,7 +25,7 @@
                                     +998{{$item->number}}
                                 </td>
                                 <td class="p-2 pr-7">
-                                    {{$item->role}}
+                                    {{$item->role->role}}
                                 </td>
                                 <th class="p-2 pr-7">
                                     <a href="{{ route('oneUser', $item->id)}}">подробнее</a>

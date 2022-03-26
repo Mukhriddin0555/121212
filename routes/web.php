@@ -73,8 +73,8 @@ Route::middleware(['resseption','auth'])->group(function(){
     //роль рессепшна видеть свои заказы. фильтрация + добавление заказов пост 3 та линк
     
     Route::get('/resseption',[resseptionController::class, 'resseptionenter'])->name('resseption');
-    
-    Route::get('/resseption/{status}/{column}/{sort}',[resseptionController::class, 'ressepshnOrders'])->name('ressepshnOrders');
+    Route::get('/orderDelete/{id}',[resseptionController::class, 'orderDelete'])->name('orderDelete');
+    Route::get('/resseption/{status}/{column?}',[resseptionController::class, 'ressepshnOrders'])->name('ressepshnOrders');
     Route::post('/resseption/neworder',[resseptionController::class, 'newRessepshnOrders'])->name('newRessepshnOrders');
 
 });
@@ -88,13 +88,12 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     
     Route::get('/search/get',[branchController::class, 'searchid'])->name('searchid');
     Route::get('/waitings/all/export',[branchController::class, 'allWaitExport'])->name('allWaitExport');
-    Route::get('/vputi/{column}/{sort}',[branchController::class, 'vputi'])->name('vputi');
-    Route::get('/dostavlen/{column}/{sort}',[branchController::class, 'dostavlen'])->name('dostavlen');
-    Route::get('/waiting/{column}/{sort}',[branchController::class, 'allWait'])->name('allWait'); // шу ни узида янги ожидания кушилади
+    Route::get('/vputi/all/{column?}',[branchController::class, 'vputi'])->name('vputi');
+    Route::get('/dostavlen/all/{column?}',[branchController::class, 'dostavlen'])->name('dostavlen');
+    Route::get('/waiting/all/{column?}',[branchController::class, 'allWait'])->name('allWait'); // шу ни узида янги ожидания кушилади
     Route::get('/waitings/{id}/get',[branchController::class, 'oneWait'])->name('oneWait');
 
     Route::get('/waitings/{id}/delete/{routename}',[branchController::class, 'deleteOneWait'])->name('deleteOneWait');
-    Route::get('/waitings/{id}/editstatus',[branchController::class, 'statusOneWait'])->name('statusOneWait');
     Route::get('/waitings/{id}/delivered/{routename}',[branchController::class, 'deliveredOneWait'])->name('deliveredOneWait');
 
     Route::post('/wait/new',[branchController::class, 'addNewWait'])->name('addNewWait');
@@ -106,7 +105,7 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     Route::get('/waitings/selected2/{routename}',[branchController::class, 'selecteddelete'])->name('selecteddelete');
     //----------------------------------------------------------------------------------------------------------
     //продажа учун роут
-    Route::get('/waitorder/{column}/{sort}',[branchController::class, 'allWaitOrder'])->name('allWaitOrder');
+    Route::get('/waitorder/{column?}',[branchController::class, 'allWaitOrder'])->name('allWaitOrder');
     Route::get('/waitorders/{id}/get',[branchController::class, 'oneWaitOrder'])->name('oneWaitOrder');
 
     Route::get('/waitingsorder/{id}/delete',[branchController::class, 'deleteOneWaitOrder'])->name('deleteOneWaitOrder');
@@ -130,18 +129,18 @@ Route::middleware(['admin','auth'])->group(function(){
         return view('dashboard');
     })->middleware(['auth'])->name('admin');
     //фойдаланувчиларни кушиш, куриш, узгартириш ва учириш учун
-    Route::get('/users/{column}/{sort}',[adminController::class, 'allUsers'])->name('allUsers');
+    Route::get('/users/{column?}/{sort?}',[adminController::class, 'allUsers'])->name('allUsers');
     Route::get('/user/{id}/get',[adminController::class, 'oneUser'])->name('oneUser');    
     Route::get('/user/{id}/delete',[adminController::class, 'deleteOneUser'])->name('deleteOneUser');
 
-    Route::get('/users/new',[adminController::class, 'newUser'])->name('newUser');
-    Route::post('/users/new',[adminController::class, 'addNewUser'])->name('addNewUser');
+    Route::get('/usersadd/new',[adminController::class, 'newUser'])->name('newUser');
+    Route::post('/usersadd/new',[adminController::class, 'addNewUser'])->name('addNewUser');
 
     Route::get('/user/{id}/edit',[adminController::class, 'editOneUser'])->name('editOneUser');
     Route::post('/user/{id}/edit',[adminController::class, 'updateOneUser'])->name('updateOneUser');
 //---------------------------------------------------------------------------------------------------
     //филиалларни  кушиш, куриш, узгартириш ва учириш учун//
-    Route::get('/branchs/{column}/{sort}',[adminController::class, 'allBranchs'])->name('allBranchs');    
+    Route::get('/allbranchsget/{column?}/{sort?}',[adminController::class, 'allBranchs'])->name('allBranchs');    
     Route::get('/branch/{id}/get',[adminController::class, 'oneBranch'])->name('oneBranch');    
     Route::get('/branch/{id}/delete',[adminController::class, 'deleteOneBranch'])->name('deleteOneBranch');
 
