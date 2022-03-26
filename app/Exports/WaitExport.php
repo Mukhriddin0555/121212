@@ -48,7 +48,7 @@ class WaitExport implements FromView, WithStyles, WithColumnWidths, WithColumnFo
         ->get();
         $sklad_id = $sklad_id[0]->id;
         $waits = DB::table('waitings')
-        ->leftJoin('spareparts', 'waitings.sap_kod', '=', 'spareparts.sap_kod')
+        ->leftJoin('spareparts', 'waitings.sparepart_id', '=', 'spareparts.id')
         ->join('statuses', 'waitings.status_id', '=', 'statuses.id')
         ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')       
         ->where('warehouse_id', $sklad_id)
@@ -102,12 +102,12 @@ class WaitExport implements FromView, WithStyles, WithColumnWidths, WithColumnFo
         ->get();
         $sklad_id = $sklad_id[0]->id;
         $waits = DB::table('waitings')
-        ->leftJoin('spareparts', 'waitings.sap_kod', '=', 'spareparts.sap_kod')
+        ->leftJoin('spareparts', 'waitings.sparepart_id', '=', 'spareparts.id')
         ->join('statuses', 'waitings.status_id', '=', 'statuses.id')
         ->join('warehouses', 'waitings.warehouse_id', '=', 'warehouses.id')       
         ->where('warehouse_id', $sklad_id)
         ->where('status_id', '!=', 2)
-        ->select('waitings.crm_id', 'waitings.sap_kod', 'spareparts.name as sapname', 'warehouses.Kod as warehouseskod',
+        ->select('waitings.crm_id', 'spareparts.sap_kod as sap_kod', 'spareparts.name as sapname', 'warehouses.Kod as warehouseskod',
         'waitings.how', 'waitings.created_at', 'statuses.name as statusname', 'waitings.order', 'warehouses.name as servisname')
         ->get();
 
