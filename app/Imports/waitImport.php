@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\waiting;
+use App\Models\sparepart;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -29,14 +30,14 @@ class waitImport implements ToModel
                 $sklad_id = DB::table('warehouses')
                 ->where('user_id', $user)
                 ->first();
-
+                $sparepart_id = sparepart::firstOrCreate(['sap_kod' => $row[1]],['name' => 'Не найден']);
                 $wait = new waiting();
                 if(strlen($row[0]) == 12){
                 $date = $this->findDate($row[0]);
                 $crm_id = strval($row[0]);
                 $wait->crm_id = $crm_id;
                 $wait->data = $date;
-                $wait->sap_kod = $row[1];
+                $wait->sparepart_id = $sparepart_id->id;
                 $wait->how = $row[2];
                 $wait->warehouse_id = $sklad_id->id;
                 $wait->status_id = 1;           
@@ -49,7 +50,7 @@ class waitImport implements ToModel
                 $date = $this->findDate($crm_id);
                 $wait->crm_id = $crm_id;
                 $wait->data = $date;
-                $wait->sap_kod = $row[1];
+                $wait->sparepart_id = $sparepart_id->id;
                 $wait->how = $row[2];
                 $wait->warehouse_id = $sklad_id->id;
                 $wait->status_id = 1;           
