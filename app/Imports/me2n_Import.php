@@ -32,8 +32,9 @@ class me2n_Import implements ToModel
                 ->count();
                 $order = DB::table('waitings')
                 ->where('status_id', 1)
-                ->where('crm_id', $rows[0])
+                ->where('crm_id', strval($rows[0]))
                 ->where('sparepart_id', $sap_id)
+                ->where('active', 1)
                 ->first();
     
                     

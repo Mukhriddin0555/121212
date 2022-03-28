@@ -118,7 +118,7 @@ class branchController extends Controller
         $date = $this->findDate($req->crm_id);  
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
         $wait = new waiting();
-        $wait->crm_id = $req->crm_id;
+        $wait->crm_id = strval($req->crm_id);
         $wait->sparepart_id = $sparepart_id->id;
         $wait->how = $req->how;
         $wait->warehouse_id = $sklad_id;
@@ -128,6 +128,7 @@ class branchController extends Controller
         if(isset($req->order))$wait->order = $req->order;
         if($this->validateDate($date))$wait->save();
         else return redirect()->route('zavsklad')->with('errordateid', 'Поле Id введен не правильно');
+       
         return redirect()->route('zavsklad')->with('success', 'Введеный запись успешно добавлен');
         
     }
