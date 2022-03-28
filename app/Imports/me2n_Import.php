@@ -43,7 +43,7 @@ class me2n_Import implements ToModel
                 $order = DB::table('waitings')
                 ->where('status_id', 1)
                 ->where('crm_id', $rows[0])
-                ->where('sap_kod', $sap_id)
+                ->where('sparepart_id', $sap_id)
                 ->where('how', $rows[2])
                 ->update(["status_id" => 3]);
 
@@ -61,7 +61,7 @@ class me2n_Import implements ToModel
                         ->select('waitings.id', 'warehouses.Kod', 'waitings.sparepart_id', 'waitings.status_id', 'waitings.how' )
                         ->where('waitings.status_id', 1)
                         ->where('warehouses.Kod', $rows[3])
-                        ->where('sap_kod', $sap_id)
+                        ->where('sparepart_id', $sap_id)
                         ->get();
                         
                         
