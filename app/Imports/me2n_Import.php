@@ -71,7 +71,7 @@ class me2n_Import implements ToModel
                             
                             foreach ($waitings as $wait){
                                 if($count >= $wait->how){
-                                    $waiting = waiting::find($house->id);
+                                    $waiting = waiting::find($wait->id);
                                     $waiting->status_id = 3;
                                     $waiting->save();
                                     $count -= $waiting->how;

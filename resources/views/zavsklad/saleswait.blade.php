@@ -5,13 +5,13 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table class="flex justify-center">
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['crm_id', 'asc'])}}">CRM ID</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['sap_kod', 'asc'])}}">Сап код</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['sapname', 'asc'])}}">Наименование</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['how', 'asc'])}}">шт</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['order', 'asc'])}}">Заказ</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['crm_id'])}}">CRM ID</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['sapkod/sap_kod'])}}">Сап код</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['sapkod.name'])}}">Наименование</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['how'])}}">шт</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['order'])}}">Заказ</a></th>
                         <th class="p-2 pr-3"></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['statusname', 'asc'])}}">Текущий статус</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['status.name'])}}">Текущий статус</a></th>
                         <th class="p-2 pr-3"></th>   
                         <th class="p-2 pr-3"></th> 
                         @foreach ($data as $item)
