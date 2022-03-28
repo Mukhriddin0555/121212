@@ -128,7 +128,6 @@ class branchController extends Controller
         if(isset($req->order))$wait->order = $req->order;
         if($this->validateDate($date))$wait->save();
         else return redirect()->route('zavsklad')->with('errordateid', 'Поле Id введен не правильно');
-       
         return redirect()->route('zavsklad')->with('success', 'Введеный запись успешно добавлен');
         
     }
