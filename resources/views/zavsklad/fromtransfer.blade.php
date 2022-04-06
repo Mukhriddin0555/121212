@@ -11,6 +11,18 @@
         </div>
         @endforeach
         @endif
+        @if (session('noDelete'))
+                            <div class="flex justify-center ">
+                                <div class="w-1/2 font-black bg-red-400 rounded m-5 text-center">{{ session('noDelete') }}
+                                </div>
+                            </div>
+        @endif
+        @if (session('deleted'))
+                            <div class="flex justify-center">
+                                <div class="w-1/2 font-black bg-green-300 rounded m-5 text-center">{{ session('deleted') }}
+                                </div>
+                            </div>
+        @endif
         <form class="w-full " action="{{ route('newtransfer')}}" method="post">
             @csrf
             <div><h6>Добавить заказ на трансфер</h6></div>
@@ -21,7 +33,7 @@
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                   Сап код
                 </label>
-                <input name="sap_kod" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
+                <input name="sparepart_id" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
                 </div>
                 <div class="w-full md:w-1/4 px-3">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
@@ -34,7 +46,7 @@
                     Выбрать филиал
                 </label>
                 <select name="tosklad" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                    @foreach ($data3 as $branch)
+                    @foreach ($branchs as $branch)
                         <option value="{{ $branch->id}}">{{ $branch->name}}</option>
                     @endforeach
                   </select>
@@ -51,57 +63,50 @@
         <div class="py-2">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <table>
-                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['updated_at', 'asc'])}}">Обновлен</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['sap_kod', 'asc'])}}">Сап код</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['sapname', 'asc'])}}">Наименование</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['how', 'asc'])}}">шт</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['toskladname', 'asc'])}}">Сервис</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['answer_id', 'asc'])}}">Ответ из филиала</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['text', 'asc'])}}">Примечание</a></th>        
-                        <th class="p-2 pr-3"></th>
+                    <table class="flex justify-center">
+                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['updated_at'])}}">Обновлен</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['sparepart_id'])}}">Сап код</a></th>
+                        <th class="p-2 pr-3">Наименование</th>
+                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['how'])}}">шт</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['to_user_id'])}}">Сервис</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['answer_id'])}}">Статус</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('myTransfers', ['text'])}}">Примечание</a></th>        
+                        <th class="p-1 pr-1">
+                            <th class="p-2 pr-3"></th>
+                        </th>
                         @foreach ($data1 as $item)
                             <tr>
                                 <td class="p-2 pr-3 text-xs">
                                     {{$item->updated_at}}
                                 </td>
                                 <td class="p-2 pr-3">
-                                    {{$item->sap_kod}}
+                                    {{$item->sparepart->sap_kod}}
                                 </td>
                                 <td class="p-2 pr-3 text-xs">
-                                    {{$item->sapname}}
+                                    {{$item->sparepart->name}}
                                 </td>
                                 <td class="p-2 pr-3">
                                     {{$item->how}}
                                 </td>
                                 <td class="p-2 pr-3">
-                                    {{$item->toskladname}}
+                                    {{$item->toTransfer->name}}
                                 </td>
-                                @if ($item->toresponse == 'Отправлен')
-                                <td class="p-2 pr-3">
-                                    <form action="{{ route('oneMyTransfer', $item->id)}}" method="GET">
-                                        <select name="answer" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                                            <option value="{{ $item->answer_id}}" selected="selected">{{ $item->toresponse}}</option>
-                                            @foreach ($data2 as $status)
-                                                <option value="{{ $status->id}}">{{ $status->name}}</option>
-                                            @endforeach
-                                          </select>                    
-                                </td>
-                                <td class="p-2 pr-3">
-                                    {{$item->text}}
-                                </td>
-                                <td class="p-2 pr-3">
-                                    <button type="submit"><img src="{{asset('storage/save_icon2.png')}}"  alt="Сохранить" class="w-4 h-4"></button>
-                                </td>
-                            </form>
-                                @else
                                 <td class="p-2 pr-3 text-xs">
-                                    {{$item->toresponse}}
+                                    {{$item->allanswaer->name}}
                                 </td>
                                 <td class="p-2 pr-3 text-xs">
                                     {{$item->text}}
                                 </td>
-                                @endif 
+                                @if ($item->answer_id == 7)
+                                <td class="p-1 pr-1">
+                                    <x-link.delivered deld="{{ route('oneMyTransfer', [$item->id])}}" />
+                                </td>
+                                @endif
+                                @if ($item->answer_id != 7 && $item->answer_id != 2 && $item->answer_id != 8)
+                                <td class="p-1 pr-1">
+                                    <x-link.delete delete="{{ route('oneMyTransferDelete', [$item->id])}}" />
+                                </td>
+                                @endif
                             </tr>
                         @endforeach
                     </table>
@@ -109,17 +114,10 @@
             </div>
         </div>
         @endsection
-        @section('countwait')
-            {{ $data4 }}
-        @endsection
-        @section('countvputi')
-            {{ $data5 }}
-        @endsection
-        @section('countdostavlen')
-            {{ $data6 }}
-        @endsection
-        @section('countprodaja')
-            {{ $data7 }}
-        @endsection
+        @foreach ($count as $item => $value)
+                @section($item)
+                    {{ $value }}
+                @endsection
+        @endforeach
     </x-slot>
 </x-zavsklad.ojidaniye>

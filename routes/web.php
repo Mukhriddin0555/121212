@@ -112,11 +112,12 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     Route::get('/waitingsorder/{id}/delivered',[branchController::class, 'deliveredOneWaitOrder'])->name('deliveredOneWaitOrder');
     //----------------------------------------------------------------------------------------------------------
     //Трансфер учун
-    Route::get('/transfer/my/{column}/{sort}',[branchController::class, 'myTransfers'])->name('myTransfers');
-    Route::get('/transfered/my/{id}/get',[branchController::class, 'oneMyTransfer'])->name('oneMyTransfer');
-
-    Route::get('/transfer/our/{column}/{sort}',[branchController::class, 'ourTransfers'])->name('ourTransfers');
-    Route::get('/transfered/our/{id}/get',[branchController::class, 'oneOurTransfer'])->name('oneOurTransfer');
+    Route::get('/transfer/my/{column?}',[branchController::class, 'myTransfers'])->name('myTransfers');
+    Route::get('/transfered/my/{id}/delive',[branchController::class, 'oneMyTransfer'])->name('oneMyTransfer');
+    Route::get('/transfered/my/{id}/delete',[branchController::class, 'oneMyTransferDelete'])->name('oneMyTransferDelete');
+    
+    Route::get('/transfer/our/{column?}',[branchController::class, 'ourTransfers'])->name('ourTransfers');
+    Route::post('/transfered/our/{id}/get',[branchController::class, 'oneOurTransfer'])->name('oneOurTransfer');
 
     Route::post('/newtransfer',[branchController::class, 'newtransfer'])->name('newtransfer');
 

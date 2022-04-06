@@ -1,25 +1,30 @@
 <table>
     <thead>
-    <tr class="bg-sky-500">
-        <th class="bg-sky-500">ID</th>
-        <th class="bg-sky-500">Сап</th>
-        <th class="bg-sky-500">Наименования</th>
-        <th class="bg-sky-500">Сервис</th>
-        <th class="bg-sky-500">Код</th>
-        <th class="bg-sky-500">К-во</th>
-        <th class="bg-sky-500">Дата</th>
-        <th class="bg-sky-500">Состояние</th>
-        <th class="bg-sky-500"></th>
-        <th class="bg-sky-500"></th>
-        <th class="bg-sky-500"></th>
-        <th class="bg-sky-500"></th>
-        <th class="bg-sky-500">№Заявки</th>
+    <tr >
+        <th>ID</th>
+        <th>Сап</th>
+        <th>Наименования</th>
+        <th>Сервис</th>
+        <th>Код</th>
+        <th>К-во</th>
+        <th>Дата</th>
+        <th>Состояние</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>№Заявки</th>
     </tr>
     </thead>
     <tbody>
     @foreach($waits as $wait)
         <tr>
+            
+            @if (strlen($wait->crm_id) == 11)
+            <td>'0{{ $wait->crm_id }}</td>
+            @else
             <td>{{ $wait->crm_id }}</td>
+            @endif            
             <td>{{ $wait->sap_kod }}</td>
             <td>{{ $wait->sapname }}</td>
             <td>{{ $wait->servisname }}</td>

@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\sparepart;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransfersTable extends Migration
+class CreateMailArtelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,14 +14,14 @@ class CreateTransfersTable extends Migration
      */
     public function up()
     {
-        Schema::create('transfers', function (Blueprint $table) {
+        Schema::create('mail_artels', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(sparepart::class);
-            $table->integer('how');
+            $table->foreignIdFor(User::class);
             $table->integer('from_user_id');
-            $table->integer('to_user_id');
-            $table->integer('answer_id');
-            $table->text('text')->nullable();
+            $table->string('topic');
+            $table->integer('transfer_id')->default(0);
+            $table->integer('active')->default(1);
+            $table->text('text');
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ class CreateTransfersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transfers');
+        Schema::dropIfExists('mail_artels');
     }
 }

@@ -9,10 +9,12 @@ use App\Models\status;
 use App\Models\waiting;
 use App\Models\transfer;
 use App\Models\historyWait;
+use App\Models\MailArtel;
 use App\Models\ress;
 use Illuminate\Http\Request;
 use App\Models\resseptionOrders;
 use App\Models\sparepart;
+use App\Models\SpareTransfer;
 use App\Models\User;
 use App\Models\warehouse;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +29,7 @@ class branchController extends Controller
         $wait = resseptionOrders::where('warehouse_id', $sklad_id)->where('status_id', 1)->count();
         return $wait;}
     
-    public function counterVputi(){
-        
+    public function counterVputi(){        
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
         $wait = waiting::where('warehouse_id', $sklad_id)->where('status_id', 3)->where('active', 1)->count();
         return $wait;}
@@ -171,92 +172,79 @@ class branchController extends Controller
 
     //--------------------------------------------------------------
     //обработка трансферов
-    public function myTransfers($column, $sort)
+    public function myTransfers($column = 'created_at')
     {    
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
-        
-        $transfer = DB::table('transfers')
-        ->leftJoin('spareparts', 'transfers.sap_kod', '=', 'spareparts.sap_kod')
-        ->join('warehouses as fromwarehouses', 'transfers.from_user_id', '=', 'fromwarehouses.id')  
-        ->join('warehouses as towarehouses', 'transfers.to_user_id', '=', 'towarehouses.id')
-        ->join('answaers', 'transfers.answer_id', '=', 'answaers.id')
-        ->select('transfers.*', 'fromwarehouses.name as fromskladname','towarehouses.name as toskladname','spareparts.name as sapname','answaers.name as toresponse')
-        ->where('from_user_id', $sklad_id)
-        ->orderBy($column, $sort)
-        ->get();
-
-        $dostavlen = 'Получил трансфер';
-        $confirm = DB::table('answaers')
-        ->where('name', $dostavlen)
-        ->get();
-
-        $branch = DB::table('warehouses')
-        ->where('id', '!=', $sklad_id)
-        ->get();
-        
-        $data4 = $this->counterWait();
-        $data5 = $this->counterVputi();
-        $data6 = $this->counterDostavlen();
-        $data7 = $this->counterProdaja();
-
-        return view('zavsklad.fromtransfer', ['data1' => $transfer, 'data2' => $confirm, 'data3' => $branch,
-        'data4' => $data4, 'data5' => $data5, 'data6' => $data6, 'data7' => $data7]);
-        //dd($confirm);
+        $transfer = transfer::where('from_user_id', $sklad_id)->orderBy($column)->get();
+        $branchs = warehouse::where('id', '!=', $sklad_id)->get();
+        $count = $this->countmetod();
+        return view('zavsklad.fromtransfer', ['data1' => $transfer, 'branchs' => $branchs, 'count' => $count]);
     }
-    public function oneMyTransfer(Request $req, $id)
+    public function oneMyTransfer($id)
     {     
         $transfer = transfer::find($id);
         $user = Auth::User()->sklad->id;
         $transferdefine = transfer::find($id)->from_user_id;
         if($user == $transferdefine)
         {
-            $transfer->answer_id = $req->answer;
+            $transfer->answer_id = 2;
             $transfer->text = "Ожидание трансфера";
             $transfer->save();
-            return redirect()->route('myTransfers', ['sap_kod', 'asc']);
+            return redirect()->route('myTransfers', ['updated_at']);
         }
         
-        return redirect()->route('myTransfers', ['sap_kod', 'asc']);
+        return redirect()->route('myTransfers', ['updated_at']);
     }
-    public function ourTransfers($column, $sort)
+    public function oneMyTransferDelete($id)
     {     
-        $user = Auth::User()->id;
-        $sklad_id = DB::table('warehouses')
-        ->where('user_id', $user)
-        ->get();
-        $sklad_id = $sklad_id[0]->id;
-        $transfer = DB::table('transfers')
-        ->leftJoin('spareparts', 'transfers.sap_kod', '=', 'spareparts.sap_kod')
-        ->join('warehouses as fromwarehouses', 'transfers.from_user_id', '=', 'fromwarehouses.id')  
-        ->join('warehouses as towarehouses', 'transfers.to_user_id', '=', 'towarehouses.id')
-        ->join('answaers', 'transfers.answer_id', '=', 'answaers.id')
-        ->select('transfers.*', 'fromwarehouses.name as fromskladname','towarehouses.name as toskladname','spareparts.name as sapname','answaers.name as toresponse')
-        ->where('to_user_id', $sklad_id)
-        ->orderBy($column, $sort)
-        ->get();
-        $data4 = $this->counterWait();
-        $data5 = $this->counterVputi();
-        $data6 = $this->counterDostavlen();
-        $data7 = $this->counterProdaja();
+        $transfer = transfer::find($id);
+        $user = Auth::User()->sklad->id;
+        $transferdefine = transfer::find($id)->from_user_id;
+        if($user == $transferdefine && $transfer->answer_id != 2 && $transfer->answer_id != 7 && $transfer->answer_id != 8)
+        {
+            $transfer->delete();
+            return redirect()->route('myTransfers', ['updated_at'])->with('deleted', 'Успешно удален');
+        }
+        
+        return redirect()->route('myTransfers', ['updated_at'])->with('noDelete', 'Данный запись удалить невозможно');
+    }
+    public function ourTransfers($column)
+    {     
+        $sklad_id = User::find(Auth::User()->id)->sklad->id;
+        $transfer = transfer::where('to_user_id', $sklad_id)->orderBy($column)->get();
+        $count = $this->countmetod();
 
         $confirm = DB::table('answaers')->get();
 
-        return view('zavsklad.totransfer', ['data1' => $transfer, 'data2' => $confirm,
-        'data4' => $data4, 'data5' => $data5, 'data6' => $data6, 'data7' => $data7]);
+        return view('zavsklad.totransfer', ['data1' => $transfer, 'data2' => $confirm, 'count' => $count]);
     }
     public function oneOurTransfer(Request $req, $id)
     {     
-        $req->validate([
-            'answer' => ['required', 'string', 'max:255'],
-            'info' => ['required', 'string', 'max:255'],
-        ]);
+        $req->validate(['answer' => ['required', 'string', 'max:255'],'info' => ['required', 'string', 'max:255'],]);
         $transfer = transfer::find($id);
         $transfer->answer_id = $req->answer;
         $transfer->text = $req->info;
         $transfer->save();
-        return redirect()->route('ourTransfers', ['sap_kod', 'asc']);
-        //dd($transfer);
+        if($transfer->answer_id == 7){
+            $user_id = warehouse::where('id', $transfer->from_user_id)->with('user')->first()->user->id;
+            $mail = new MailArtel();
+            $mail->user_id = $user_id;
+            $mail->from_user_id = Auth::user()->id;
+            $mail->topic = "Подтверждение отправки";
+            $mail->transfer_id = $transfer->id;
+            $mail->text = $transfer->text;
+            $mail->save();
+            warehouse::find($transfer->to_user_id)->increment('orderinc');
+            $spare_transfer = new SpareTransfer();
+            $spare_transfer->user_id = $transfer->to_user_id;
+            $spare_transfer->to_user_id = $transfer->from_user_id;
+            $spare_transfer->how = $transfer->how;
+            $spare_transfer->order_number = warehouse::find($transfer->to_user_id)->orderinc;
+            $spare_transfer->save();
+        }
+        return redirect()->route('ourTransfers', ['updated_at']);
     }
+    //создание новой заявки на трансфер и сообшение для юсера
     public function newtransfer(Request $req)
     {   
         $req->validate([
@@ -265,40 +253,47 @@ class branchController extends Controller
             'text' => ['required'],
             'tosklad' => ['required'],
         ]);  
-        $user = Auth::User()->id;
-        $sklad_id = DB::table('warehouses')
-        ->where('user_id', $user)
-        ->get();
-        $sklad_id = $sklad_id[0]->id;
-
+        $sparepart = sparepart::firstOrCreate(['sap_kod' => $req->sparepart_id],['name' => 'Не найден']);
+        $sklad_id = User::find(Auth::User()->id)->sklad->id;
+        //$user = User::find(Auth::User()->id);
         $transfer = new transfer();
 
-        $transfer->sparepart_id = $req->sparepart_id;
+        $transfer->sparepart_id = $sparepart->id;
         $transfer->how = $req->how;
         $transfer->text = $req->text;
         $transfer->from_user_id = $sklad_id;
         $transfer->to_user_id = $req->tosklad;
         $transfer->answer_id = 1;
         $transfer->save();
-
-        return redirect()->route('myTransfers', ['sap_kod', 'asc']);
+        //$warehouse = warehouse::find($sklad_id);
+        if(transfer::find($transfer->id)){
+            $user_id = warehouse::where('id', $transfer->to_user_id)->with('user')->first()->user->id;
+            $mail = new MailArtel();
+            $mail->user_id = $user_id;
+            $mail->from_user_id = Auth::User()->id;
+            $mail->topic = "Запрос на трансфер";
+            $mail->transfer_id = $transfer->id;
+            $mail->text = $transfer->text;
+            $mail->save();
+            //"Здраствуйте. Прошу вас отправить с ближайщим рейсом $sparepart->sap_kod $sparepart->name $req->how шт на филиал $warehouse->Kod - $warehouse->name . с уважением $user->surname $user->lastname"
+        }
+        return redirect()->route('myTransfers', ['updated_at']);
     }
-
+    //мульти изменения статуса ожидания на доставлен 
     public function selecteddelivered(Request $req, $routename = 'allWait'){
         foreach ($req->selected as $item => $value){
             waiting::where('id', $value)->update(['status_id' => 2]);
         }
-        
         return redirect()->route($routename, ['crm_id']);
     }
+    //мульти удаление записей ожидании
     public function selecteddelete(Request $req, $routename = 'allWait'){
-        
         foreach ($req->selected as $item => $value){
             $onewait = waiting::where('id',$value)->update(['active' => 0]);
         }
         return redirect()->route($routename, ['crm_id']);
     }
-
+    //экспорт списка ожидании на экзель
     public function allWaitExport(){
         $user = Auth::User()->id;
         $sklad_id = DB::table('warehouses')
@@ -309,8 +304,8 @@ class branchController extends Controller
         //dd($sklad_id);
         return Excel::download(new WaitExport, $date . "-" . $sklad_id . '.xlsx');
     }
+    //поиск по id в таблице ожидании
     public function searchid(Request $req){
-        
         $search1 = $req->search;
         $search =  str_replace("*", "%", $search1);
         $data = waiting::where('crm_id', 'LIKE', "$search")->count();

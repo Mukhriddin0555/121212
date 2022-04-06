@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPaidToWaitingsTable extends Migration
+class AddPaidToWarehousesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddPaidToWaitingsTable extends Migration
      */
     public function up()
     {
-        Schema::table('waitings', function (Blueprint $table) {
-            $table->integer('active')->default(1);
+        Schema::table('warehouses', function (Blueprint $table) {
+            $table->integer('orderinc')->default(0);
         });
     }
 
@@ -25,8 +25,8 @@ class AddPaidToWaitingsTable extends Migration
      */
     public function down()
     {
-        Schema::table('waitings', function (Blueprint $table) {
-            $table->integer('active')->default(1);
+        Schema::table('warehouses', function (Blueprint $table) {
+            //
         });
     }
 }

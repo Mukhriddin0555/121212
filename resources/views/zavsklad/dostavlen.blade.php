@@ -45,9 +45,16 @@
                                 <td class="p-1 pr-3">
                                     {{$item->updated_at}}
                                 </td>
+                                @if (strlen($item->crm_id) == 11)
                                 <td class="p-1 pr-3">
-                                    <a href="{{ route('oneWait', $item->id)}}"><p class="underline decoration-solid text-blue-600">{{$item->crm_id}}</p></a>
+                                    <a href="{{ route('oneWait', $item->id)}}"><p class="underline decoration-solid text-blue-600">0{{$item->crm_id}}</p></a>
                                 </td>
+                                @else
+                                    <td class="p-1 pr-3">
+                                        <a href="{{ route('oneWait', $item->id)}}"><p class="underline decoration-solid text-blue-600">{{$item->crm_id}}</p></a>
+                                    </td>
+                                @endif
+                                
                                 <td class="p-1 pr-3">
                                     {{$item->sapkod->sap_kod}}
                                 </td>

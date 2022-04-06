@@ -1,6 +1,6 @@
 <x-zavsklad.ojidaniye>
     <x-slot name="header">
-        @section('session-start')
+        @section('session-start')        
         @if (session('errorid'))
                             <div class="flex justify-center ">
                                 <div class="w-1/2 font-black bg-red-400 rounded m-5 text-center">{{ session('errorid') }}
