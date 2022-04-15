@@ -149,7 +149,7 @@
               </li>
               <li class="my-px">
                 <a
-                  href="#"
+                  href="{{route('FilialBranchMailAll')}}"
                   class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
                   <span class="flex items-center justify-center text-lg text-gray-400">
@@ -166,6 +166,9 @@
                     </svg>
                   </span>
                   <span class="ml-3">Почта</span>
+                  <span
+                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
+                  >@yield('countmessages')</span>
                 </a>
               </li>
               <li class="my-px">
@@ -191,7 +194,7 @@
                   <span class="ml-3">Transfer in</span>
                   <span
                     class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
-                  >10</span>
+                  >@yield('countfromtransfer')</span>
                 </a>
               </li>
               <li class="my-px">
@@ -216,6 +219,9 @@
                     </svg>
                   </span>
                   <span class="ml-3">Transfer out</span>
+                  <span
+                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
+                  >@yield('counttotransfer')</span>
                 </a>
               </li>
               <li class="my-px">

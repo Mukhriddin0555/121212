@@ -13,7 +13,7 @@
                         <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', ['1', 'how', 'asc'])}}">кол</a></th>
                         <th class="p-2 pr-7"></th>
                         @foreach ($data as $item)
-                            <tr>
+                            <tr class="hover:bg-gray-100">
                                 <td class="p-2 pr-7">
                                     {{$item->crm_id}}
                                 </td>

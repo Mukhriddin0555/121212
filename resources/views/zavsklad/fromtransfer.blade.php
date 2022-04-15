@@ -75,7 +75,7 @@
                             <th class="p-2 pr-3"></th>
                         </th>
                         @foreach ($data1 as $item)
-                            <tr>
+                            <tr class="hover:bg-gray-100">
                                 <td class="p-2 pr-3 text-xs">
                                     {{$item->updated_at}}
                                 </td>

@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\branchController;
-use App\Http\Controllers\FilialManagerController;
-use App\Http\Controllers\resseptionController;
-use App\Http\Controllers\sparepartmanagerController;
 use App\Http\Controllers\telegramController;
-use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\resseptionController;
+use App\Http\Controllers\FilialManagerController;
+use App\Http\Controllers\sparepartmanagerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,7 +79,6 @@ Route::middleware(['resseption','auth'])->group(function(){
     Route::post('/resseption/neworder',[resseptionController::class, 'newRessepshnOrders'])->name('newRessepshnOrders');
 
 });
-
 //---------------------------------------------------------------------------------------------------
 Route::middleware(['branchmanager','auth'])->group(function(){
     //роль зав.склада доступ только зав. складу
@@ -120,6 +120,15 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     Route::post('/transfered/our/{id}/get',[branchController::class, 'oneOurTransfer'])->name('oneOurTransfer');
 
     Route::post('/newtransfer',[branchController::class, 'newtransfer'])->name('newtransfer');
+    //----------------------------------------------------------------------------------------------------------
+    //мали учун
+    Route::get('/branchmanager/mail/all/{column?}',[branchController::class, 'allmail'])->name('FilialBranchMailAll');
+    Route::get('/branchmanager/mail/read/{id}',[branchController::class, 'onemail'])->name('FilialBranchMailRead');
+    Route::get('/branchmanager/mail/delete/{id}',[branchController::class, 'deletemail'])->name('FilialBranchMailDelete');
+    Route::get('/branchmanager/mail/new/message',[branchController::class, 'newmail'])->name('FilialBranchMailNewMessage');
+    Route::post('/branchmanager/mail/new/message',[branchController::class, 'addnewmail'])->name('FilialBranchAddMailNewMessage');
+    Route::get('/branchmanager/mail/deletemulti',[branchController::class, 'deletemailmulti'])->name('FilialBranchMailDeleteMulti');
+    
 
 });
 

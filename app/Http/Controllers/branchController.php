@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Exports\WaitExport;
 use App\Imports\waitImport;
 use DateTime;
-use App\Models\status;
 use App\Models\waiting;
 use App\Models\transfer;
-use App\Models\historyWait;
 use App\Models\MailArtel;
-use App\Models\ress;
 use Illuminate\Http\Request;
 use App\Models\resseptionOrders;
 use App\Models\sparepart;
@@ -41,8 +38,28 @@ class branchController extends Controller
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
         $wait = waiting::where('warehouse_id', $sklad_id)->where('status_id', 2)->where('active', 1)->count();
         return $wait;}
+    public function counternewmessages(){
+        $user_id = Auth::User()->id;
+        $messages = MailArtel::where('user_id', $user_id)->where('active', 1)->count();
+        return $messages;}
+    public function counterfromtransfer(){
+        $sklad_id = User::find(Auth::User()->id)->sklad->id;
+        $transfersfrom = transfer::where('from_user_id', $sklad_id)->where('answer_id', 7)->count();
+        return $transfersfrom;}
+    public function countertotransfer(){
+        $sklad_id = User::find(Auth::User()->id)->sklad->id;
+        $transfersto = transfer::where('to_user_id', $sklad_id)->where('answer_id', 1)->count();
+        return $transfersto;}
     public function countmetod(){
-        return ['countvputi' => $this->counterVputi(), 'countwait' => $this->counterWait(), 'countdostavlen' => $this->counterDostavlen(), 'countprodaja' => $this->counterProdaja()];}
+        return [
+            'countvputi' => $this->counterVputi(), 
+            'countwait' => $this->counterWait(), 
+            'countdostavlen' => $this->counterDostavlen(), 
+            'countprodaja' => $this->counterProdaja(),
+            'countmessages' => $this->counternewmessages(),
+            'countfromtransfer' => $this->counterfromtransfer(),
+            'counttotransfer' => $this->countertotransfer(),
+        ];}
     public function zavsklad(){
         $count = $this->countmetod();
         return view('zavsklad', ['count' => $count]);
@@ -150,7 +167,7 @@ class branchController extends Controller
     public function allWaitOrder($column = 'crm_id')
     {   
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
-        $wait = resseptionOrders::where('warehouse_id', $sklad_id)->with('status')->with('sapkod')->orderByDesc('crm_id')->get();
+        $wait = resseptionOrders::where('warehouse_id', $sklad_id)->where('status_id', 1)->with('status')->with('sapkod')->orderByDesc('crm_id')->get();
         $count = $this->countmetod();
         return view('zavsklad.saleswait', ['data' => $wait, 'count' => $count]);
     }
@@ -323,5 +340,64 @@ class branchController extends Controller
             return redirect()->route('zavsklad')->with('errorid', 'В базе данных не найдено совпадений по записи:' . $search1);
             
         }
+    }
+    public function allmail($column = 'active'){
+        $user_id = Auth::User()->id;
+        $count = $this->countmetod();
+        $messages = DB::table('mail_artels')
+        ->join('users', 'mail_artels.from_user_id', '=', 'users.id')
+        ->join('roles', 'users.role_id', '=', 'roles.id')
+        ->where('mail_artels.user_id', $user_id)
+        ->orderBy($column)
+        ->select('mail_artels.created_at', 'mail_artels.topic', 'mail_artels.active', 'mail_artels.id', 'roles.role', 'users.surname', 'users.lastname')
+        ->get();
+        
+        return view('zavsklad.allmail', ['count' => $count, 'messages' => $messages]);
+        //dd($messages);
+    }
+    public function onemail($id){
+        $user_id = Auth::User()->id;
+        $count = $this->countmetod();
+        $message = MailArtel::find($id);
+        if($user_id == $message->user_id){
+            $message->active = 2;
+            $message->save();
+            return view('zavsklad.readonemail', ['count' => $count, 'message' => $message]);
+        }else{return redirect()->route('FilialBranchMailAll');}
+    }
+    public function deletemail($id){
+        $user_id = Auth::User()->id;
+        $message = MailArtel::find($id);
+        if($user_id == $message->user_id){
+            $message->delete();
+            return redirect()->route('FilialBranchMailAll')->with('deletedmessage', 'Сообшение успешно удалено');
+        }else{return redirect()->route('FilialBranchMailAll')->with('erroredmessage', 'Сообшение не удалено');}
+    }
+    public function newmail(){
+        $count = $this->countmetod();
+        $user_id = Auth::User()->id;
+        $users = User::where('id', '!=', $user_id)->with('role')->get()->sortBy('surname');
+        return view('zavsklad.newmail', ['count' => $count, 'users' => $users]);
+    }
+    public function addnewmail(Request $request){
+        $request->validate([
+            'user_id' => ['required'],
+            'topic' => ['required'],
+            'text' => ['required'],
+        ]); 
+        $user_id = Auth::User()->id;
+        $newmessage = new MailArtel();
+        $newmessage->user_id = $request->user_id;
+        $newmessage->from_user_id = $user_id;
+        $newmessage->topic = $request->topic;
+        $newmessage->text = $request->text;
+        $newmessage->save();
+        return redirect()->route('FilialBranchMailAll')->with('sucsessmessage', 'Сообшение успешно оптравлено');
+    }
+    public function deletemailmulti(Request $req){
+        foreach ($req->selected as $item => $value){
+            MailArtel::find($value)->delete();
+        }
+        return redirect()->route('FilialBranchMailAll')->with('deletedmessage', 'Сообшении успешно удалены');
     }
 }

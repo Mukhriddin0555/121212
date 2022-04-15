@@ -20,7 +20,7 @@
         </script>
         <form id="selectedopt" method="GET"></form> 
         <div>
-            <div class="max-w-7xl ml-2 mx-auto sm:px-6>
+            <div class="max-w-7xl ml-2 mx-auto sm:px-6">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table class="flex justify-center my-3.5">
                         <th class="p-1 pr-3"><a href="{{ route('allWait', ['data'])}}">Дата ID</a></th>
@@ -34,7 +34,7 @@
                         <th class="p-1 pr-3"></th>
                         <th class="p-1 pr-3">Длит.</th>
                         @foreach ($allwait as $item)
-                            <tr>
+                            <tr class="hover:bg-gray-100">
                                 <td class="p-1 pr-3">
                                     {{$item->data}}
                                 </td>

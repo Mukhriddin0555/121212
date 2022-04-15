@@ -41,7 +41,7 @@
                         <th class="p-1 pr-3"></th>   
                         <th class="p-1 pr-3"></th>
                         @foreach ($allwait as $item)
-                            <tr>
+                            <tr class="hover:bg-gray-100">
                                 <td class="p-1 pr-3">
                                     {{$item->updated_at}}
                                 </td>

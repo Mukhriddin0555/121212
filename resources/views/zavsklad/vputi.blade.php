@@ -44,7 +44,7 @@
                         <th class="p-1 pr-3"></th>
                         <th class="p-1 pr-3">Длит.</th>
                         @foreach ($allwait as $item)
-                            <tr>
+                            <tr class="hover:bg-gray-100">
                                 <td class="p-1 pr-3">
                                     {{$item->data}}
                                 </td>
