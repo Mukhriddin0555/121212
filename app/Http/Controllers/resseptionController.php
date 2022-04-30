@@ -44,7 +44,7 @@ class resseptionController extends Controller
         $data3 = $this->counterdostavlen();
 
 
-        return view('resseption.orders', ['data' => $data, 'data2' => $data2, 'data3' => $data3]);
+        return view('resseption.orders', ['data' => $data, 'data2' => $data2, 'data3' => $data3, 'status' => $status]);
     }
 
     public function newRessepshnOrders(Request $req)

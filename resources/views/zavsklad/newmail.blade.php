@@ -79,10 +79,15 @@
 
         @endsection
         @foreach ($count as $item => $value)
-                @section($item)
-                    {{ $value }}
-                @endsection
-        @endforeach
-        
+                @if ($value > 0)
+                    @section($item)
+                    <span class="flex items-center justify-center text-xs text-red-500 font-semibold 
+                    bg-red-100 h-6 px-2 rounded-full ml-auto">{{ $value }}</span>
+                    @endsection
+                @endif
+            @endforeach
+        @section('mailtrue')
+        true
+        @endsection
     </x-slot>
 </x-zavsklad.ojidaniye>

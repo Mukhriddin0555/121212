@@ -1,17 +1,22 @@
 <x-zavsklad.ojidaniye>
     <x-slot name="header">
         @section('session-start')
+        <div class="flex space-x-2 justify-center p-4">
+            <h2 class="text-4xl font-medium leading-tight text-gray-800">
+            {{$status}} тип заявки:  
+                <span class="inline-block py-1.5 px-2.5 leading-none text-center whitespace-nowrap 
+                align-baseline font-bold bg-blue-600 text-white rounded">Продажа</span></h2>
+          </div>
         <div class="py-2">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table class="flex justify-center">
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['crm_id'])}}">CRM ID</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['sapkod/sap_kod'])}}">Сап код</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['sapkod.name'])}}">Наименование</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['how'])}}">шт</a></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['order'])}}">Заказ</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', [$status2, 'crm_id'])}}">CRM ID</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', [$status2, 'sapkod'])}}">Сап код</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', [$status2, 'sapname'])}}">Наименование</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', [$status2, 'how'])}}">шт</a></th>
+                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', [$status2, 'order'])}}">Заказ</a></th>
                         <th class="p-2 pr-3"></th>
-                        <th class="p-2 pr-3"><a href="{{ route('allWaitOrder', ['status.name'])}}">Текущий статус</a></th>
                         <th class="p-2 pr-3"></th>   
                         <th class="p-2 pr-3"></th> 
                         @foreach ($data as $item)
@@ -20,10 +25,10 @@
                                     {{$item->crm_id}}
                                 </td>
                                 <td class="p-2 pr-3">
-                                    {{$item->sapkod->sap_kod}}
+                                    {{$item->sapkod}}
                                 </td>
                                 <td class="p-2 pr-3 text-xs">
-                                    {{$item->sapkod->name}}
+                                    {{$item->sapname}}
                                 </td>
                                 <td class="p-2 pr-3">
                                     {{$item->how}}
@@ -47,9 +52,6 @@
                                     </td>
                                     @endif
                                 
-                                <td class="p-2 pr-3">
-                                    {{$item->status->name}}
-                                </td>
                                 <th class="p-2 pr-3">
                                     <a href="{{ route('deliveredOneWaitOrder', $item->id)}}" title="Доставлено"><img src="{{asset('storage/dostavlen.png')}}"  alt="Доставлен" class="w-4 h-4"></a>
                                 </th>
@@ -64,10 +66,15 @@
         </div>
         @endsection
         @foreach ($count as $item => $value)
+                @if ($value > 0)
                 @section($item)
-                    {{ $value }}
+                <span class="flex items-center justify-center text-xs text-red-500 font-semibold 
+                bg-red-100 h-6 px-2 rounded-full ml-auto">{{ $value }}</span>
                 @endsection
+                @endif
         @endforeach
-        
+        @section('salestrue')
+        true
+        @endsection
     </x-slot>
 </x-zavsklad.ojidaniye>

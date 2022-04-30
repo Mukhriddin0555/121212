@@ -7,10 +7,10 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table class="flex justify-center">
-                        <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', ['1', 'crm_id', 'asc'])}}">CRM ID</a></th>
-                        <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', ['1', 'sap_kod', 'asc'])}}">Сап код</a></th>
-                        <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', ['1', 'sap.name', 'asc'])}}">Наименование</a></th>
-                        <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', ['1', 'how', 'asc'])}}">кол</a></th>
+                        <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', [$status, 'crm_id', 'asc'])}}">CRM ID</a></th>
+                        <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', [$status, 'sap_kod', 'asc'])}}">Сап код</a></th>
+                        <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', [$status, 'sap.name', 'asc'])}}">Наименование</a></th>
+                        <th class="p-2 pr-7"><a href="{{ route('ressepshnOrders', [$status, 'how', 'asc'])}}">кол</a></th>
                         <th class="p-2 pr-7"></th>
                         @foreach ($data as $item)
                             <tr class="hover:bg-gray-100">

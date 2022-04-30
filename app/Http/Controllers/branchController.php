@@ -25,6 +25,11 @@ class branchController extends Controller
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
         $wait = resseptionOrders::where('warehouse_id', $sklad_id)->where('status_id', 1)->count();
         return $wait;}
+    public function counterProdajadostavlen(){
+            $sklad_id = User::find(Auth::User()->id)->sklad->id;
+            $wait = resseptionOrders::where('warehouse_id', $sklad_id)->where('status_id', 2)->count();
+            return $wait;
+        }
     
     public function counterVputi(){        
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
@@ -59,6 +64,7 @@ class branchController extends Controller
             'countmessages' => $this->counternewmessages(),
             'countfromtransfer' => $this->counterfromtransfer(),
             'counttotransfer' => $this->countertotransfer(),
+            'countprodajadostavlen' => $this->counterProdajadostavlen(),
         ];}
     public function zavsklad(){
         $count = $this->countmetod();
@@ -164,12 +170,32 @@ class branchController extends Controller
     }
     //--------------------------------------------------------------------
     //обработка ожидании запчастей на продажу
-    public function allWaitOrder($column = 'crm_id')
-    {   
+    protected function joinAllWaitSales($status, $column){
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
-        $wait = resseptionOrders::where('warehouse_id', $sklad_id)->where('status_id', 1)->with('status')->with('sapkod')->orderByDesc('crm_id')->get();
+        $wait = resseptionOrders::where('warehouse_id', $sklad_id)
+        ->where('status_id', $status)
+        ->join('statuses', 'statuses.id','=', 'status_id')
+        ->join('spareparts', 'spareparts.id','=' ,'sparepart_id')
+        ->orderBy($column)
+        ->select(
+                'resseption_orders.status_id',
+                'resseption_orders.id',
+                'resseption_orders.crm_id', 
+                'spareparts.sap_kod as sapkod', 
+                'spareparts.name as sapname', 
+                'resseption_orders.how',
+                'resseption_orders.order',)
+        ->get();
+
+        return $wait;
+    }
+    public function allWaitOrder($status = 1, $column = 'crm_id')
+    {   
+        $wait = $this->joinAllWaitSales($status, $column);
         $count = $this->countmetod();
-        return view('zavsklad.saleswait', ['data' => $wait, 'count' => $count]);
+        $status1 = ($status == 1) ? "Ожидание" : "Доставлен";
+        return view('zavsklad.saleswait', ['data' => $wait, 'count' => $count, 'status' => $status1, 'status2' => $status]);
+        //dd($wait);
     }
     public function oneWaitOrder(Request $req, $id)
     {     
@@ -250,6 +276,7 @@ class branchController extends Controller
             $mail->topic = "Подтверждение отправки";
             $mail->transfer_id = $transfer->id;
             $mail->text = $transfer->text;
+            $mail->form = 1;
             $mail->save();
             warehouse::find($transfer->to_user_id)->increment('orderinc');
             $spare_transfer = new SpareTransfer();
@@ -291,6 +318,7 @@ class branchController extends Controller
             $mail->topic = "Запрос на трансфер";
             $mail->transfer_id = $transfer->id;
             $mail->text = $transfer->text;
+            $mail->form = 2;
             $mail->save();
             //"Здраствуйте. Прошу вас отправить с ближайщим рейсом $sparepart->sap_kod $sparepart->name $req->how шт на филиал $warehouse->Kod - $warehouse->name . с уважением $user->surname $user->lastname"
         }
@@ -341,42 +369,82 @@ class branchController extends Controller
             
         }
     }
-    public function allmail($column = 'active'){
+    public function allmailincoming($column = 'active'){
         $user_id = Auth::User()->id;
         $count = $this->countmetod();
         $messages = DB::table('mail_artels')
         ->join('users', 'mail_artels.from_user_id', '=', 'users.id')
         ->join('roles', 'users.role_id', '=', 'roles.id')
         ->where('mail_artels.user_id', $user_id)
+        ->where('mail_artels.isdeleteuser1', 0)
         ->orderBy($column)
         ->select('mail_artels.created_at', 'mail_artels.topic', 'mail_artels.active', 'mail_artels.id', 'roles.role', 'users.surname', 'users.lastname')
         ->get();
         
-        return view('zavsklad.allmail', ['count' => $count, 'messages' => $messages]);
+        return view('zavsklad.allmailincoming', ['count' => $count, 'messages' => $messages]);
         //dd($messages);
     }
-    public function onemail($id){
+    public function allmailoutgoing($column = 'active'){
+        $user_id = Auth::User()->id;
+        $count = $this->countmetod();
+        $messages = DB::table('mail_artels')
+        ->join('users', 'mail_artels.user_id', '=', 'users.id')
+        ->join('roles', 'users.role_id', '=', 'roles.id')
+        ->where('mail_artels.from_user_id', $user_id)
+        ->where('mail_artels.isdeleteuser2', 0)
+        ->orderBy($column)
+        ->select('mail_artels.created_at', 'mail_artels.topic', 'mail_artels.active', 'mail_artels.id', 'roles.role', 'users.surname', 'users.lastname')
+        ->get();
+        
+        return view('zavsklad.allmailoutgoing', ['count' => $count, 'messages' => $messages]);
+        //dd($messages);
+    }
+    public function onemailuser1($id){
         $user_id = Auth::User()->id;
         $count = $this->countmetod();
         $message = MailArtel::find($id);
         if($user_id == $message->user_id){
             $message->active = 2;
             $message->save();
-            return view('zavsklad.readonemail', ['count' => $count, 'message' => $message]);
-        }else{return redirect()->route('FilialBranchMailAll');}
+            $trid = $message->transfer_id;
+            if($trid > 0){
+                $transfer = transfer::find($trid);
+                $user = User::find($message->from_user_id);
+                return view('zavsklad.readonemail'.$message->form, ['count' => $count, 'message' => $message, 'transfer' => $transfer, 'user' => $user]);
+            }else{
+                return view('zavsklad.readonemail'.$message->form, ['count' => $count, 'message' => $message]);
+            }
+            
+        }else{return redirect()->route('FilialBranchMailAllIncoming');}
     }
-    public function deletemail($id){
+    public function onemailuser2($id){
+        $user_id = Auth::User()->id;
+        $count = $this->countmetod();
+        $message = MailArtel::find($id);
+        if($user_id == $message->from_user_id){
+            return view('zavsklad.readonemail', ['count' => $count, 'message' => $message]);
+        }else{return redirect()->route('FilialBranchMailAllOutgoing');}
+    }
+    public function deletemailuser1($id){
         $user_id = Auth::User()->id;
         $message = MailArtel::find($id);
         if($user_id == $message->user_id){
-            $message->delete();
-            return redirect()->route('FilialBranchMailAll')->with('deletedmessage', 'Сообшение успешно удалено');
-        }else{return redirect()->route('FilialBranchMailAll')->with('erroredmessage', 'Сообшение не удалено');}
+            if($message->isdeleteuser2 == 1){$message->delete();}else{$message->isdeleteuser1 = 1; $message->save();}
+            return redirect()->route('FilialBranchMailAllIncoming')->with('deletedmessage', 'Сообшение успешно удалено');
+        }else{return redirect()->route('FilialBranchMailAllIncoming')->with('erroredmessage', 'Сообшение не удалено');}
+    }
+    public function deletemailuser2($id){
+        $user_id = Auth::User()->id;
+        $message = MailArtel::find($id);
+        if($user_id == $message->from_user_id){
+            if($message->isdeleteuser1 == 1){$message->delete();}else{$message->isdeleteuser2 = 1; $message->save();}
+            return redirect()->route('FilialBranchMailAllOutgoing')->with('deletedmessage', 'Сообшение успешно удалено');
+        }else{return redirect()->route('FilialBranchMailAllOutgoing')->with('erroredmessage', 'Сообшение не удалено');}
     }
     public function newmail(){
         $count = $this->countmetod();
         $user_id = Auth::User()->id;
-        $users = User::where('id', '!=', $user_id)->with('role')->get()->sortBy('surname');
+        $users = User::where('id', '!=', $user_id)->with('role')->orderBy('surname')->get();
         return view('zavsklad.newmail', ['count' => $count, 'users' => $users]);
     }
     public function addnewmail(Request $request){
@@ -392,12 +460,30 @@ class branchController extends Controller
         $newmessage->topic = $request->topic;
         $newmessage->text = $request->text;
         $newmessage->save();
-        return redirect()->route('FilialBranchMailAll')->with('sucsessmessage', 'Сообшение успешно оптравлено');
+        return redirect()->route('FilialBranchMailAllIncoming')->with('sucsessmessage', 'Сообшение успешно оптравлено');
     }
-    public function deletemailmulti(Request $req){
+    public function deletemailmultiuser1(Request $req){
+        $user_id = Auth::User()->id;
+        
         foreach ($req->selected as $item => $value){
-            MailArtel::find($value)->delete();
+            
+            $message = MailArtel::find($value);
+            if($user_id == $message->from_user_id){
+                if($message->isdeleteuser2 == 1){$message->delete();}else{$message->isdeleteuser1 = 1; $message->save();}
+            }
+            
         }
-        return redirect()->route('FilialBranchMailAll')->with('deletedmessage', 'Сообшении успешно удалены');
+        return redirect()->route('FilialBranchMailAllIncoming')->with('deletedmessage', 'Сообшении успешно удалены');
+    }
+    public function deletemailmultiuser2(Request $req){
+        $user_id = Auth::User()->id;
+        foreach ($req->selected as $item => $value){
+            $message = MailArtel::find($value);
+            if($user_id == $message->user_id){
+                if($message->isdeleteuser1 == 1){$message->delete();}else{$message->isdeleteuser2 = 1; $message->save();}
+            }
+
+        }
+        return redirect()->route('FilialBranchMailAllOutgoing')->with('deletedmessage', 'Сообшении успешно удалены');
     }
 }

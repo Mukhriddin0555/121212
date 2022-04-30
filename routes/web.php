@@ -105,7 +105,7 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     Route::get('/waitings/selected2/{routename}',[branchController::class, 'selecteddelete'])->name('selecteddelete');
     //----------------------------------------------------------------------------------------------------------
     //продажа учун роут
-    Route::get('/waitorder/{column?}',[branchController::class, 'allWaitOrder'])->name('allWaitOrder');
+    Route::get('/waitorder/{status}/{column?}',[branchController::class, 'allWaitOrder'])->name('allWaitOrder');
     Route::get('/waitorders/{id}/get',[branchController::class, 'oneWaitOrder'])->name('oneWaitOrder');
 
     Route::get('/waitingsorder/{id}/delete',[branchController::class, 'deleteOneWaitOrder'])->name('deleteOneWaitOrder');
@@ -121,13 +121,17 @@ Route::middleware(['branchmanager','auth'])->group(function(){
 
     Route::post('/newtransfer',[branchController::class, 'newtransfer'])->name('newtransfer');
     //----------------------------------------------------------------------------------------------------------
-    //мали учун
-    Route::get('/branchmanager/mail/all/{column?}',[branchController::class, 'allmail'])->name('FilialBranchMailAll');
-    Route::get('/branchmanager/mail/read/{id}',[branchController::class, 'onemail'])->name('FilialBranchMailRead');
-    Route::get('/branchmanager/mail/delete/{id}',[branchController::class, 'deletemail'])->name('FilialBranchMailDelete');
+    //маил учун
+    Route::get('/branchmanager/mail/incoming/{column?}',[branchController::class, 'allmailincoming'])->name('FilialBranchMailAllIncoming');
+    Route::get('/branchmanager/mail/outgoing/{column?}',[branchController::class, 'allmailoutgoing'])->name('FilialBranchMailAllOutgoing');
+    Route::get('/branchmanager/mail/read/user1/{id}',[branchController::class, 'onemailuser1'])->name('FilialBranchMailRead1');
+    Route::get('/branchmanager/mail/read/user2/{id}',[branchController::class, 'onemailuser2'])->name('FilialBranchMailRead2');
+    Route::get('/branchmanager/mail/user1/delete/{id}',[branchController::class, 'deletemailuser1'])->name('FilialBranchMailDeleteUser1');
+    Route::get('/branchmanager/mail/user2/delete/{id}',[branchController::class, 'deletemailuser2'])->name('FilialBranchMailDeleteUser2');
     Route::get('/branchmanager/mail/new/message',[branchController::class, 'newmail'])->name('FilialBranchMailNewMessage');
     Route::post('/branchmanager/mail/new/message',[branchController::class, 'addnewmail'])->name('FilialBranchAddMailNewMessage');
-    Route::get('/branchmanager/mail/deletemulti',[branchController::class, 'deletemailmulti'])->name('FilialBranchMailDeleteMulti');
+    Route::get('/branchmanager/mail/user1/deletemulti',[branchController::class, 'deletemailmultiuser1'])->name('FilialBranchMailDeleteMultiUser1');
+    Route::get('/branchmanager/mail/user2/deletemulti',[branchController::class, 'deletemailmultiuser2'])->name('FilialBranchMailDeleteMultiUser2');
     
 
 });

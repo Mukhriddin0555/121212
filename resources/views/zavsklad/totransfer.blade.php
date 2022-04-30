@@ -1,6 +1,13 @@
 <x-zavsklad.ojidaniye>
     <x-slot name="header">
         @section('session-start')
+        <div class="flex space-x-2 justify-center p-4">
+            <h2 class="text-4xl font-medium leading-tight text-gray-800">
+                
+                Запросы на  
+                <span class="inline-block py-1.5 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-600 text-white rounded">Трансфер</span>
+            с регионов</h2>
+          </div>
         <div class="py-2">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -68,9 +75,15 @@
         </div>
         @endsection
         @foreach ($count as $item => $value)
+                @if ($value > 0)
                 @section($item)
-                    {{ $value }}
+                <span class="flex items-center justify-center text-xs text-red-500 font-semibold 
+                bg-red-100 h-6 px-2 rounded-full ml-auto">{{ $value }}</span>
                 @endsection
+                @endif
         @endforeach
+        @section('transfertrue')
+        true
+        @endsection
     </x-slot>
 </x-zavsklad.ojidaniye>

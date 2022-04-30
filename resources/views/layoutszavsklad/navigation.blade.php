@@ -16,238 +16,194 @@
               <li class="my-px">
                 <a
                   href="{{ route('admin') }}"
-                  class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-700 bg-gray-100"
+                  class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
-                  <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path
-                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                      />
-                    </svg>
-                  </span>
+                <img src="{{asset('storage/homepage_icon.png')}}"  alt="vputi" class="w-6 h-6 mr-3">
                   <span class="ml-3">Главная страница</span>
                 </a>
               </li>
               <li class="my-px">
-                <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Отчеты</span>
+                <div x-data="{ open: @hasSection('waittrue')
+                @yield('mailtrue')
+                @else
+                false
+                @endif }">
+                  <button @click="open = ! open" class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 
+                  hover:bg-gray-100 hover:text-gray-700 w-full"><img src="{{asset('storage/wait_icon.png')}}"  alt="wait" class="w-6 h-6 mr-3">Заявки</button>
+               
+                  <div x-show="open" class="border rounded border-cyan-400 p-2">
+                      <ul>
+                        <li class="my-px">
+                          <a
+                            href="{{route('allWait', ['crm_id'])}}"
+                            class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                          >
+                          <img src="{{asset('storage/waiting_icon.png')}}"  alt="wait" class="w-6 h-6 mr-3">
+                            <span class="ml-3">Ожидание</span>
+                            @yield('countwait')
+                          </a>
+                        </li>
+                        <li class="my-px">
+                          <a
+                            href="{{route('vputi', ['crm_id'])}}"
+                            class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                          >
+                          <img src="{{asset('storage/vputi_icon.png')}}"  alt="vputi" class="w-6 h-6 mr-3">
+                            <span class="ml-3">В пути</span>
+                            @yield('countvputi')
+                          </a>
+                        </li>
+                        <li class="my-px">
+                          <a
+                            href="{{route('dostavlen', ['crm_id'])}}"
+                            class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 
+                            hover:text-gray-700"
+                          >
+                          <img src="{{asset('storage/delivery_icon.png')}}"  alt="wait" class="w-6 h-6 mr-3">
+                            <span class="ml-3">Доставлен</span>
+                            @yield('countdostavlen')
+                            
+                          </a>
+                        </li>
+                      </ul>
+                  </div>
+              </div>
               </li>
               <li class="my-px">
-                <a
-                  href="{{route('allWait', ['crm_id'])}}"
-                  class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path
-                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                      />
-                    </svg>
-                  </span>
-                  <span class="ml-3">Ожидание</span>
-                  <span
-                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
-                  >@yield('countwait')</span>
-                </a>
+                <div x-data="{ open: @hasSection('salestrue')
+                @yield('mailtrue')
+                @else
+                false
+                @endif }">
+                  <button @click="open = ! open" class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 
+                  hover:bg-gray-100 hover:text-gray-700 w-full"><img src="{{asset('storage/wait_icon.png')}}"  alt="wait" class="w-6 h-6 mr-3">Продажа</button>
+               
+                  <div x-show="open" class="border rounded border-cyan-400 p-2">
+                      <ul>
+                        <li>
+                          <a
+                          href="{{route('allWaitOrder', [1,'crm_id'])}}"
+                          class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                        >
+                        <img src="{{asset('storage/waiting_icon.png')}}"  alt="wait" class="w-6 h-6">
+                          <span class="ml-3">Ожидании</span>
+                          @yield('countprodaja')
+                        </a>
+                        </li>
+                        <li>
+                          <a
+                          href="{{route('allWaitOrder', [2,'crm_id'])}}"
+                          class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                        >
+                        <img src="{{asset('storage/delivery_icon.png')}}"  alt="del" class="w-6 h-6">
+                          <span class="ml-3">Доставлен</span>
+                          @yield('countprodajadostavlen')
+                        </a>
+                        </li>
+                      </ul>
+                  </div>
+                </div>
+                
               </li>
+              
               <li class="my-px">
-                <a
-                  href="{{route('vputi', ['crm_id'])}}"
-                  class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                      />
-                    </svg>
-                  </span>
-                  <span class="ml-3">В пути</span>
-                  <span
-                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
-                  >@yield('countvputi')</span>
-                </a>
+                <div x-data="{ open: @hasSection('transfertrue')
+                @yield('mailtrue')
+                @else
+                false
+                @endif }">
+                  <button @click="open = ! open" class="flex flex-row items-center h-10 px-3 rounded-lg 
+                  text-gray-300 hover:bg-gray-100 hover:text-gray-700 w-full">
+                  <img src="{{asset('storage/transfer_icon.png')}}"  alt="tr" class="w-6 h-6 mr-3">Трансфер</button>
+               
+                  <div x-show="open" class="border rounded border-cyan-400 p-2">
+                      <ul>
+                        <li class="my-px">
+                          <a
+                            href="{{route('myTransfers', 'answer_id')}}"
+                            class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                          >
+                          <img src="{{asset('storage/incoming_icon.png')}}"  alt="in" class="w-6 h-6">
+                            <span class="ml-3">Входящие</span>
+                            @yield('countfromtransfer')
+                          </a>
+                        </li>
+                        <li class="my-px">
+                          <a
+                            href="{{route('ourTransfers', ['answer_id'])}}"
+                            class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                          >
+                          <img src="{{asset('storage/outgoing_icon.png')}}"  alt="out" class="w-6 h-6">
+                            <span class="ml-3">Изходящие</span>
+                            @yield('counttotransfer')
+                          </a>
+                        </li>
+                        <li class="my-px">
+                          <a
+                            href="{{route('myTransfers', 'answer_id')}}"
+                            class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                          >
+                          <img src="{{asset('storage/history_icon.png')}}"  alt="hist" class="w-6 h-6">
+                            <span class="ml-3">История</span>
+                          </a>
+                        </li>
+                      </ul>
+                  </div>
+              </div>
               </li>
+              
               <li class="my-px">
-                <a
-                  href="{{route('dostavlen', ['crm_id'])}}"
-                  class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                  </span>
-                  <span class="ml-3">Доставлен</span>
-                  <span
-                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
-                  >@yield('countdostavlen')</span>
+                <div x-data="{ open: @hasSection('mailtrue')
+                @yield('mailtrue')
+                @else
+                false
+                @endif }">
                   
-                </a>
-              </li>
-              <li class="my-px">
-                <span class="flex font-medium text-sm text-gray-300 px-4 my-4 uppercase">Дургие</span>
-              </li>
-              <li class="my-px">
-                <a
-                  href="{{route('allWaitOrder', ['statusname'])}}"
+                  <button @click="open = ! open" class="flex flex-row items-center h-10 px-3 
+                  rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700 w-full">
+                  <img src="{{asset('storage/mail_icon.png')}}"  alt="mail" class="w-6 h-6 mr-3">
+                  Почта</button>
+               
+                  <div x-show="open" class="border rounded border-cyan-400 p-2">
+                      <ul>
+                        <li>
+                          <a
+                  href="{{route('FilialBranchMailNewMessage')}}"
                   class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
-                  <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path
-                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                      />
-                    </svg>
-                  </span>
-                  <span class="ml-3">Продажа</span>
-                  <span
-                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
-                  >@yield('countprodaja')</span>
+                  <img src="{{asset('storage/new_message_icon.png')}}"  alt="in" class="w-6 h-6">
+                  <span class="ml-3">Новое сообшение</span>
                 </a>
-              </li>
-              <li class="my-px">
-                <a
-                  href="{{route('FilialBranchMailAll')}}"
+                        </li>
+                        <li>
+                          <a
+                  href="{{route('FilialBranchMailAllIncoming')}}"
                   class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
-                  <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </span>
-                  <span class="ml-3">Почта</span>
-                  <span
-                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
-                  >@yield('countmessages')</span>
+                  <img src="{{asset('storage/incoming_icon.png')}}"  alt="in" class="w-6 h-6">
+                  <span class="ml-3">Входящие</span>
+                  @yield('countmessages')
                 </a>
-              </li>
-              <li class="my-px">
-                <a
-                  href="{{route('myTransfers', 'answer_id')}}"
+                        </li>
+                        <li>
+                          <a
+                  href="{{route('FilialBranchMailAllOutgoing')}}"
                   class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
-                  <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                      />
-                    </svg>
-                  </span>
-                  <span class="ml-3">Transfer in</span>
-                  <span
-                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
-                  >@yield('countfromtransfer')</span>
+                  <img src="{{asset('storage/outgoing_icon.png')}}"  alt="out" class="w-6 h-6">
+                  <span class="ml-3">Изходящие</span>
                 </a>
+                        </li>
+                      </ul>
+                  </div>
+              </div>
+                
               </li>
+              
               <li class="my-px">
-                <a
-                  href="{{route('ourTransfers', ['answer_id'])}}"
-                  class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <span class="flex items-center justify-center text-lg text-gray-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                      />
-                      <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </span>
-                  <span class="ml-3">Transfer out</span>
-                  <span
-                    class="flex items-center justify-center text-xs text-red-500 font-semibold bg-red-100 h-6 px-2 rounded-full ml-auto"
-                  >@yield('counttotransfer')</span>
-                </a>
-              </li>
-              <li class="my-px">
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700">
                 @csrf
-                <a
-                  href="#"
-                  class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                >
-                  <span class="flex items-center justify-center text-lg text-red-400">
-                    <svg
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="h-6 w-6"
-                    >
-                      <path
-                        d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
-                      />
-                    </svg>
-                  </span>
-                  <button type="submit"><span class="ml-3">Logout</span></button>
-                </a>
+                <img src="{{asset('storage/exit_icon.png')}}"  alt="exit" class="w-6 h-6 mr-3"><button type="submit">Выйти</button>
                 </form>
               </li>
             </ul>

@@ -29,27 +29,21 @@
         </div>
         @endforeach
         @endif
+        <div class="flex space-x-2 justify-center p-4">
+            <h2 class="text-4xl font-medium leading-tight text-gray-800">
+                Изходящие сообшении
+          </div>
         <div>
             <div class="max-w-7xl ml-2 mx-auto sm:px-6>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table class="flex justify-center my-3.5 w-full">
-                        <th class="p-1 pr-1"></th>
-                        <th class="p-1 pr-14"><a href="{{ route('FilialBranchMailAll', ['surname'])}}">Отправитель</a></th>
-                        <th class="p-1 pr-14"><a href="{{ route('FilialBranchMailAll', ['role'])}}">Должность</a></th>
-                        <th class="p-1 pr-14"><a href="{{ route('FilialBranchMailAll', ['topic'])}}">Тема</a></th>
-                        <th class="p-1 pr-14"><a href="{{ route('FilialBranchMailAll', ['created_at'])}}">Дата отправки</a></th>
+                        <th class="p-1 pr-14"><a href="{{ route('FilialBranchMailAllIncoming', ['surname'])}}">Получатель</a></th>
+                        <th class="p-1 pr-14"><a href="{{ route('FilialBranchMailAllIncoming', ['role'])}}">Должность</a></th>
+                        <th class="p-1 pr-14"><a href="{{ route('FilialBranchMailAllIncoming', ['topic'])}}">Тема</a></th>
+                        <th class="p-1 pr-14"><a href="{{ route('FilialBranchMailAllIncoming', ['created_at'])}}">Дата отправки</a></th>
                         <th class="p-1 pr-1"></th>
                         @foreach ($messages as $item)
                             <tr class="hover:bg-gray-100">
-                                @if ($item->active == 1)
-                                <td class="p-1 pr-1">
-                                    <img src="{{asset('storage/message1_icon.png')}}"  alt="Прочитан" class="w-4 h-4">
-                                </td>
-                                @else
-                                <td class="p-1 pr-1">
-                                    <img src="{{asset('storage/message_icon.png')}}"  alt="Прочитан" class="w-4 h-4">
-                                </td>
-                                @endif
                                 <td class="p-1 pr-14">
                                     {{$item->surname}} {{$item->lastname}}
                                 </td>
@@ -57,13 +51,13 @@
                                     {{$item->role}}
                                 </td>
                                 <td class="p-1 pr-14">
-                                    <a href="{{ route('FilialBranchMailRead', [$item->id]) }}">{{$item->topic}}</a>
+                                    <a href="{{ route('FilialBranchMailRead2', [$item->id]) }}">{{$item->topic}}</a>
                                 </td>
                                 <td class="p-1 pr-1 text-xs">
                                     {{$item->created_at}}
                                 </td>
                                 <th class="p-1 pr-1">
-                                    <x-link.delete delete="{{ route('FilialBranchMailDelete', [$item->id]) }}" />
+                                    <x-link.delete delete="{{ route('FilialBranchMailDeleteUser2', [$item->id]) }}" />
                                 </th>
                                 <th class="p-1 pr-1 text-xs">
                                     <input type="checkbox" name="selected[]" form="selectedopt" value="{{$item->id}}">
@@ -77,18 +71,21 @@
             <div class="flex justify-center">
                 <input type="button" onclick='selects()' value="выбрать все" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400"><br>
                 <input type="button" onclick='deSelect()' value="отменить все" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400">
-                <button form="selectedopt"  formaction="{{ route('FilialBranchMailDeleteMulti')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Удалить</button>
-                <button title="Отправить Новое сообшение" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 "><a href="{{ route('FilialBranchMailNewMessage')}}">Создать новое</a></button>
-                
+                <button form="selectedopt"  formaction="{{ route('FilialBranchMailDeleteMultiUser2')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Удалить</button>
                 <br>
             </div>
         </div>
+        @section('mailtrue')
+        true
         @endsection
-        @foreach ($count as $item => $value)
-                @section($item)
-                    {{ $value }}
-                @endsection
-        @endforeach
-        
+            @foreach ($count as $item => $value)
+                @if ($value > 0)
+                    @section($item)
+                    <span class="flex items-center justify-center text-xs text-red-500 font-semibold 
+                    bg-red-100 h-6 px-2 rounded-full ml-auto">{{ $value }}</span>
+                    @endsection
+                @endif
+            @endforeach
+@endsection 
     </x-slot>
 </x-zavsklad.ojidaniye>
