@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class resseption.appresseption extends Component
+class resseptionappresseption extends Component
 {
     /**
      * Create a new component instance.

@@ -20,8 +20,10 @@ class CreateWarehousesTable extends Migration
             $table->string('name')->unique();
             $table->foreignIdFor(User::class);
             $table->integer('manager_id');
+            $table->integer('branchmanager_id');
             $table->string('adress');
             $table->string('location');
+            $table->integer('orderinc')->default(0);
             $table->timestamps();
         });
     }

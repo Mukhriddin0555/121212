@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class branchmanager.branfilialmanager extends Component
+class branchmanagerbranfilialmanager extends Component
 {
     /**
      * Create a new component instance.

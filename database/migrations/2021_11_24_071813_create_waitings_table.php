@@ -18,7 +18,7 @@ class CreateWaitingsTable extends Migration
     {
         Schema::create('waitings', function (Blueprint $table) {
             $table->id();
-            $table->string('data');
+            $table->date('data');
             $table->string('crm_id');
             $table->foreignIdFor(sparepart::class);
             $table->integer('how');
@@ -26,6 +26,7 @@ class CreateWaitingsTable extends Migration
             $table->foreignIdFor(warehouse::class);
             $table->foreignIdFor(status::class);
             $table->text('text')->nullable();
+            $table->integer('active')->default(1);
             $table->string('image1')->nullable();
             $table->string('image2')->nullable();
             $table->string('image3')->nullable();

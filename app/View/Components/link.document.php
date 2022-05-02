@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class link.document extends Component
+class linkdocument extends Component
 {
     public $docurl;
     /**

@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class link.delete extends Component
+class linkdelete extends Component
 {
     public $delete;
     /**

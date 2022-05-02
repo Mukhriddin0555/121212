@@ -1,7 +1,8 @@
 <?php
 
-use App\Models\status;
 use App\Models\User;
+use App\Models\status;
+use App\Models\sparepart;
 use App\Models\warehouse;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;

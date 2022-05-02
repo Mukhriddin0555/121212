@@ -22,6 +22,9 @@ class CreateMailArtelsTable extends Migration
             $table->integer('transfer_id')->default(0);
             $table->integer('active')->default(1);
             $table->text('text');
+            $table->integer('isdeleteuser1')->default(0);
+            $table->integer('isdeleteuser2')->default(0);
+            $table->integer('form')->default(0);
             $table->timestamps();
         });
     }

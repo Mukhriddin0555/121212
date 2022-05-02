@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\answer;
+use App\Models\answaer;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -20,7 +20,7 @@ class CreateMessagesTable extends Migration
             $table->integer('to_user_id');
             $table->string('subject');
             $table->text('text');
-            $table->foreignIdFor(answer::class);;
+            $table->foreignIdFor(answaer::class);;
             $table->timestamps();
         });
     }

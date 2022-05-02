@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class transfer.allTransfer extends Component
+class transferallTransfer extends Component
 {
     /**
      * Create a new component instance.

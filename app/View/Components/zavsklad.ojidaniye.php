@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class zavsklad.ojidaniye extends Component
+class zavskladojidaniye extends Component
 {
     /**
      * Create a new component instance.

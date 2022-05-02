@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class link.more extends Component
+class linkmore extends Component
 {
     public $more;
     /**

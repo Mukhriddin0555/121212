@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class link.delivered extends Component
+class linkdelivered extends Component
 {   
     public $deld;
     /**
