@@ -53,9 +53,9 @@
                   </label>
                   <div class="relative">
                     <select name="manager_id" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                      <option selected value="{{$data3->managername->id}}">{{$data3->managername->surname}} {{$data3->branchmanager->lastname}}</option>
-                        @if (isset($data1->userall))
-                          @foreach ($data1->userall as $data)
+                      <option selected value="{{$data3->managername->id}}">{{$data3->managername->surname}} {{$data3->managername->lastname}}</option>
+                        @if (isset($manager->userall))
+                          @foreach ($manager->userall as $data)
                           @if ($data->active == 0)
                             <option value="{{ $data->id}}">{{ $data->surname}} {{ $data->lastname}}</option>
                           @endif

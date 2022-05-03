@@ -191,7 +191,7 @@ class adminController extends Controller
         $manager = role::where('role', 'manager')->with('userall')->first();
         $zavsklad = role::where('role', 'zavsklad')->with('userall')->first();
         $branchmanager = role::where('role', 'branchfilmanager')->with('userall')->first();
-        return view('branch.editOneBranch', ['data1' => $manager, 'data2' => $zavsklad, 'data3' => $branch, 'data4' => $branchmanager]);
+        return view('branch.editOneBranch', ['manager' => $manager, 'data2' => $zavsklad, 'data3' => $branch, 'data4' => $branchmanager]);
     }
     public function updateOneBranch(Request $req, $id)
     {

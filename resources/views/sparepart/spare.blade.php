@@ -11,85 +11,94 @@
       @endforeach
       @endif
       <br>
-      <form class="w-full max-w-lg" action="{{ route('sparePartSearch')}}" method="get">
-        <div><h6>Поиск запчасти</h6></div>
-        <br>
-        <div class="flex flex-wrap -mx-3 mb-6">
-          <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-              По САП коду
-            </label>
-            <input name="sap" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text">
+      <div class="flex justify-center w-1/2 border-2 rounded p-4 m-2">
+        <form class="w-full max-w-lg" action="{{ route('sparePartSearch')}}" method="get">
+          <div><h6>Поиск запчасти</h6></div>
+          <br>
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                По САП коду
+              </label>
+              <input name="sap" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text">
+            </div>
+            <div class="w-full md:w-1/2 px-3">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                По названию
+              </label>
+              <input name="name" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
+            </div>
           </div>
-          <div class="w-full md:w-1/2 px-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-              По названию
-            </label>
-            <input name="name" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
-          </div>
-        </div>
-        <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Искать запчасти</button>
-      </form>
+          <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Искать запчасти</button>
+        </form>
+      </div>
+      
       <br>
+      <div class="flex justify-center w-1/2 border-2 rounded p-4 m-2">
         <form class="w-full max-w-lg" action="{{ route('addsparePart')}}" method="post" enctype="multipart/form-data">
-            @csrf
-            <div><h6>Добавить запчасти</h6></div>
-            <br>
-            <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                  Sap
-                </label>
-                <input name="sap" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text">
-              </div>
-              <div class="w-full md:w-1/2 px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                  Наименование
-                </label>
-                <input name="name" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
-              </div>
+          @csrf
+          <div><h6>Добавить запчасти</h6></div>
+          <br>
+          <div class="flex justify-center -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                Sap
+              </label>
+              <input name="sap" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text">
             </div>
-            <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                  Сап кодларни импорт килиш
-                </label>
-                <input name="import" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
-                <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
-              </div>
+            <div class="w-full md:w-1/2 px-3">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                Наименование
+              </label>
+              <input name="name" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name">
             </div>
-            <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
-          </form>
-          <form class="w-full max-w-lg" action="{{ route('modelImport')}}" method="post" enctype="multipart/form-data">
-            @csrf
-            <div><h6>Добавить Модели</h6></div>
-            <br>
-            <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                  Модельларни импорт килиш
-                </label>
-                <input name="modelimport" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
-                <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
-              </div>
+          </div>
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full px-3">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                Сап кодларни импорт килиш
+              </label>
+              <input name="import" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
+              <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
             </div>
-            <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
-          </form>
-          <form class="w-full max-w-lg" action="{{ route('me2nImport')}}" method="post" enctype="multipart/form-data">
-            @csrf
-            <div><h6>Добавить ME2N</h6></div>
-            <br>
-            <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full px-3">
-                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                  ME2N импорт килиш
-                </label>
-                <input name="me2nimport" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
-                <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
-              </div>
+          </div>
+          <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
+        </form>
+      </div>
+      <div class="flex justify-center w-1/2 border-2 rounded p-4 m-2">
+        <form class="w-full max-w-lg" action="{{ route('modelImport')}}" method="post" enctype="multipart/form-data">
+          @csrf
+          <div><h6>Добавить Модели</h6></div>
+          <br>
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full px-3">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                Модельларни импорт килиш
+              </label>
+              <input name="modelimport" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
+              <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
             </div>
-            <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
-          </form>
+          </div>
+          <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
+        </form>
+      </div>
+      <div class="flex justify-center w-1/2 border-2 rounded p-4 m-2">
+        <form class="w-full max-w-lg" action="{{ route('me2nImport')}}" method="post" enctype="multipart/form-data">
+          @csrf
+          <div><h6>Добавить ME2N</h6></div>
+          <br>
+          <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full px-3">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                ME2N импорт килиш
+              </label>
+              <input name="me2nimport" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
+              <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
+            </div>
+          </div>
+          <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
+        </form>
+      </div>
     </x-slot>
     <div><a href="{{route('allExport')}}">Экспорт список запчастей в экезль одим кликом</a></div>
 </x-app-layout>
