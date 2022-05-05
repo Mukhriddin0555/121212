@@ -42,7 +42,7 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     Route::get('/transfered/my/{id}/delive',[branchController::class, 'oneMyTransfer'])->name('oneMyTransfer');
     Route::get('/transfered/my/{id}/delete',[branchController::class, 'oneMyTransferDelete'])->name('oneMyTransferDelete');
     
-    Route::get('/transferoursed/{id?}',[branchController::class, 'topdfview'])->name('topdfview');
+    Route::get('/transferoursed/{id?}',[branchController::class, 'downloadPdftransfer'])->name('downloadPdftransfer');
     Route::get('/transfer/our/{column?}',[branchController::class, 'ourTransfers'])->name('ourTransfers');
     Route::post('/transfered/our/{id}/get',[branchController::class, 'oneOurTransfer'])->name('oneOurTransfer');
 
