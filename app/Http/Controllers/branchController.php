@@ -6,7 +6,6 @@ use DateTime;
 use App\Models\User;
 use App\Models\waiting;
 use App\Models\transfer;
-use PDF;
 use App\Models\MailArtel;
 use App\Models\sparepart;
 use App\Models\warehouse;
@@ -15,6 +14,7 @@ use App\Imports\waitImport;
 use Illuminate\Http\Request;
 use App\Models\SpareTransfer;
 use App\Models\resseptionOrders;
+use App\Exports\SpareTransferExel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -56,6 +56,10 @@ class branchController extends Controller
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
         $transfersto = transfer::where('to_user_id', $sklad_id)->where('answer_id', 1)->count();
         return $transfersto;}
+    public function profileuser(){
+        $user = User::find(Auth::User()->id);
+        
+        return $user;}
     public function countmetod(){
         return [
             'countvputi' => $this->counterVputi(), 
@@ -66,10 +70,12 @@ class branchController extends Controller
             'countfromtransfer' => $this->counterfromtransfer(),
             'counttotransfer' => $this->countertotransfer(),
             'countprodajadostavlen' => $this->counterProdajadostavlen(),
+            'profile' => $this->profileuser(),
         ];}
     public function zavsklad(){
         $count = $this->countmetod();
         return view('zavsklad', ['count' => $count]);
+        //dd($count['countprodajadostavlen']);
     }
     public function wherewait($id, $column = 'crm_id'){
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
@@ -280,13 +286,14 @@ class branchController extends Controller
             $mail->form = 1;
             $mail->save();
             $count = warehouse::find($transfer->to_user_id)->increment('orderinc');
+            $count = warehouse::find($transfer->to_user_id);
             $spare_transfer = new SpareTransfer();
             $spare_transfer->user_id = $transfer->to_user_id;
             $spare_transfer->to_user_id = $transfer->from_user_id;
             $spare_transfer->how = $transfer->how;
             $spare_transfer->order_number = warehouse::find($transfer->to_user_id)->orderinc;
             $spare_transfer->transfer_id = $transfer->id;
-            $spare_transfer->transfer_id = $transfer->sparepart_id;
+            $spare_transfer->sparepart_id = $transfer->sparepart_id;
             $spare_transfer->count = $count->orderinc;
             $spare_transfer->save();
         }
@@ -337,8 +344,8 @@ class branchController extends Controller
     }
     //мульти удаление записей ожидании
     public function selecteddelete(Request $req, $routename = 'allWait'){
-        foreach ($req->selected as $item => $value){
-            $onewait = waiting::where('id',$value)->update(['active' => 0]);
+        foreach ($req->selected as $value){
+            waiting::where('id',$value)->update(['active' => 0]);
         }
         return redirect()->route($routename, ['crm_id']);
     }
@@ -432,7 +439,7 @@ class branchController extends Controller
         $user_id = Auth::User()->id;
         $message = MailArtel::find($id);
         if($user_id == $message->user_id){
-            if($message->isdeleteuser2 == 1){$message->delete();}else{$message->isdeleteuser1 = 1; $message->save();}
+            if($message->isdeleteuser2 == 1){$message->delete();}else{$message->isdeleteuser1 = 1; $message->active = 0;$message->save();}
             return redirect()->route('FilialBranchMailAllIncoming')->with('deletedmessage', 'Сообшение успешно удалено');
         }else{return redirect()->route('FilialBranchMailAllIncoming')->with('erroredmessage', 'Сообшение не удалено');}
     }
@@ -440,7 +447,7 @@ class branchController extends Controller
         $user_id = Auth::User()->id;
         $message = MailArtel::find($id);
         if($user_id == $message->from_user_id){
-            if($message->isdeleteuser1 == 1){$message->delete();}else{$message->isdeleteuser2 = 1; $message->save();}
+            if($message->isdeleteuser1 == 1){$message->delete();}else{$message->isdeleteuser2 = 1; $message->active = 0; $message->save();}
             return redirect()->route('FilialBranchMailAllOutgoing')->with('deletedmessage', 'Сообшение успешно удалено');
         }else{return redirect()->route('FilialBranchMailAllOutgoing')->with('erroredmessage', 'Сообшение не удалено');}
     }
@@ -468,11 +475,11 @@ class branchController extends Controller
     public function deletemailmultiuser1(Request $req){
         $user_id = Auth::User()->id;
         
-        foreach ($req->selected as $item => $value){
+        foreach ($req->selected as $value){
             
             $message = MailArtel::find($value);
-            if($user_id == $message->from_user_id){
-                if($message->isdeleteuser2 == 1){$message->delete();}else{$message->isdeleteuser1 = 1; $message->save();}
+            if($user_id == $message->user_id){
+                if($message->isdeleteuser2 == 1){$message->delete();}else{$message->isdeleteuser1 = 1; $message->active = 0; $message->save();}
             }
             
         }
@@ -482,8 +489,8 @@ class branchController extends Controller
         $user_id = Auth::User()->id;
         foreach ($req->selected as $item => $value){
             $message = MailArtel::find($value);
-            if($user_id == $message->user_id){
-                if($message->isdeleteuser1 == 1){$message->delete();}else{$message->isdeleteuser2 = 1; $message->save();}
+            if($user_id == $message->from_user_id){
+                if($message->isdeleteuser1 == 1){$message->delete();}else{$message->isdeleteuser2 = 1;  $message->active = 0;$message->save();}
             }
 
         }
@@ -494,14 +501,13 @@ class branchController extends Controller
         //$fromhouse = warehouse::find($transfer->user_id);
         //$tohouse = warehouse::find($transfer->to_user_id);
         $data = [];
-        $pdf = PDF::loadView('exports/topdf', $data); //['transfer' => $transfer,'fromhouse' => $fromhouse, 
+        //$pdf = PDF::loadView('exports/topdf', $data); //['transfer' => $transfer,'fromhouse' => $fromhouse, 
             //'tohouse' => $tohouse]
-        return $pdf->download('Трансфер.pdf');
+        //return $pdf->download('Трансфер.pdf');
     }
-    public function topdfview($id = null){
-        //$transfer = SpareTransfer::where('transfer_id', $id)->first();
-        //$fromhouse = warehouse::find($transfer->user_id);
-        //$tohouse = warehouse::find($transfer->to_user_id);
-        return view('exports.topdf');
+    public function toexceltransfer($id){
+        {
+            return Excel::download(new SpareTransferExel($id), 'transfer.xlsx');
+        }
     }
 }

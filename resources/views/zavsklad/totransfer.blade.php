@@ -26,7 +26,12 @@
                                     {{$item->updated_at}}
                                 </td>
                                 <td class="p-2 pr-3 text-xs">
+                                    @if ($item->answer_id == 7)
+                                        <a href="{{route('toexceltransfer', [$item->id])}}" class="text-blue-500">{{$item->sparepart->sap_kod}}</a>
+                                    @else
                                     {{$item->sparepart->sap_kod}}
+                                    @endif
+                                    
                                 </td>
                                 <td class="p-2 pr-3 text-xs">
                                     {{$item->sparepart->name}}
@@ -74,14 +79,7 @@
             </div>
         </div>
         @endsection
-        @foreach ($count as $item => $value)
-                @if ($value > 0)
-                @section($item)
-                <span class="flex items-center justify-center text-xs text-red-500 font-semibold 
-                bg-red-100 h-6 px-2 rounded-full ml-auto">{{ $value }}</span>
-                @endsection
-                @endif
-        @endforeach
+        @include('layoutszavsklad.mainbar')
         @section('transfertrue')
         true
         @endsection

@@ -35,14 +35,7 @@
           <br><button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
         </form>
         @endsection
-        @foreach ($count as $item => $value)
-                @if ($value > 0)
-                @section($item)
-                <span class="flex items-center justify-center text-xs text-red-500 font-semibold 
-                bg-red-100 h-6 px-2 rounded-full ml-auto">{{ $value }}</span>
-                @endsection
-                @endif
-        @endforeach
+        @include('layoutszavsklad.mainbar')
         @section('waittrue')
         true
         @endsection
