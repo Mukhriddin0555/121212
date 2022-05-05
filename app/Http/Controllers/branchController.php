@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\WaitExport;
-use App\Imports\waitImport;
 use DateTime;
+use App\Models\User;
 use App\Models\waiting;
 use App\Models\transfer;
+use PDF;
 use App\Models\MailArtel;
-use Illuminate\Http\Request;
-use App\Models\resseptionOrders;
 use App\Models\sparepart;
-use App\Models\SpareTransfer;
-use App\Models\User;
 use App\Models\warehouse;
+use App\Exports\WaitExport;
+use App\Imports\waitImport;
+use Illuminate\Http\Request;
+use App\Models\SpareTransfer;
+use App\Models\resseptionOrders;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -278,12 +279,15 @@ class branchController extends Controller
             $mail->text = $transfer->text;
             $mail->form = 1;
             $mail->save();
-            warehouse::find($transfer->to_user_id)->increment('orderinc');
+            $count = warehouse::find($transfer->to_user_id)->increment('orderinc');
             $spare_transfer = new SpareTransfer();
             $spare_transfer->user_id = $transfer->to_user_id;
             $spare_transfer->to_user_id = $transfer->from_user_id;
             $spare_transfer->how = $transfer->how;
             $spare_transfer->order_number = warehouse::find($transfer->to_user_id)->orderinc;
+            $spare_transfer->transfer_id = $transfer->id;
+            $spare_transfer->transfer_id = $transfer->sparepart_id;
+            $spare_transfer->count = $count->orderinc;
             $spare_transfer->save();
         }
         return redirect()->route('ourTransfers', ['updated_at']);
@@ -343,8 +347,7 @@ class branchController extends Controller
         $user = Auth::User()->id;
         $sklad_id = DB::table('warehouses')
         ->where('user_id', $user)
-        ->get();
-        $sklad_id = $sklad_id[0]->Kod;
+        ->first()->Kod;
         $date = date("Y-m-d");
         //dd($sklad_id);
         return Excel::download(new WaitExport, $date . "-" . $sklad_id . '.xlsx');
@@ -485,5 +488,20 @@ class branchController extends Controller
 
         }
         return redirect()->route('FilialBranchMailAllOutgoing')->with('deletedmessage', 'Сообшении успешно удалены');
+    }
+    public function downloadPdftransfer($id = null){
+        //$transfer = SpareTransfer::where('transfer_id', $id)->first();
+        //$fromhouse = warehouse::find($transfer->user_id);
+        //$tohouse = warehouse::find($transfer->to_user_id);
+        $data = [];
+        $pdf = PDF::loadView('exports/topdf', $data); //['transfer' => $transfer,'fromhouse' => $fromhouse, 
+            //'tohouse' => $tohouse]
+        return $pdf->download('Трансфер.pdf');
+    }
+    public function topdfview($id = null){
+        //$transfer = SpareTransfer::where('transfer_id', $id)->first();
+        //$fromhouse = warehouse::find($transfer->user_id);
+        //$tohouse = warehouse::find($transfer->to_user_id);
+        return view('exports.topdf');
     }
 }
