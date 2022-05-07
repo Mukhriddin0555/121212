@@ -69,7 +69,7 @@ Route::get('/clear', function () {
     Artisan::call('config:clear');
     Artisan::call('view:clear');
     Artisan::call('route:clear');
-    return "Кэш очищено";
+    return "Кэш очищенный";
 });
 
 require __DIR__.'/auth.php';
