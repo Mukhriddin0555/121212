@@ -25,12 +25,12 @@ Route::get('/', function () {
 Route::post('/how_to_model_artel_bot',[telegramController::class, 'howToModel']);
 
 //---------------------------------------------------------------------------------------------------
-Route::middleware(['director','auth'])->group(function(){
+/*Route::middleware(['director','auth'])->group(function(){
     //Роль директора
     Route::get('/director', function () {
         return view('director');
     })->middleware(['auth'])->name('director');  
-});
+});*/
 
 //---------------------------------------------------------------------------------------------------
 Route::middleware(['manager','auth'])->group(function(){
