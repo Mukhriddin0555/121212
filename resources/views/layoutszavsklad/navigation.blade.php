@@ -120,6 +120,15 @@
                       <ul>
                         <li class="my-px">
                           <a
+                            href="{{route('addnewtransfer')}}"
+                            class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                          >
+                          <img src="{{asset('storage/incoming_icon.png')}}"  alt="in" class="w-6 h-6">
+                            <span class="ml-3">Новый заказ</span>
+                          </a>
+                        </li>
+                        <li class="my-px">
+                          <a
                             href="{{route('myTransfers', 'answer_id')}}"
                             class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                           >

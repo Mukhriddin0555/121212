@@ -11,5 +11,6 @@
         @endforeach
         @endif
         <h1>{{ $data }}</h1>
+
     </x-slot>
 </x-transfer.all-transfer>

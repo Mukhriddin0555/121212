@@ -9,6 +9,10 @@
         </div>
         @endforeach
         @endif
+        <div class="flex space-x-2 justify-center p-4">
+          <h2 class="text-4xl font-medium leading-tight text-gray-800">
+              Добавление Заказов
+        </div>
         <form class="w-full" action="{{ route('addNewWait')}}" method="post" enctype="multipart/form-data">
             @csrf
             <br>

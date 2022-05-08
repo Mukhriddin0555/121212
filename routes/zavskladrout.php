@@ -41,7 +41,8 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     Route::get('/transfer/my/{column?}',[branchController::class, 'myTransfers'])->name('myTransfers');
     Route::get('/transfered/my/{id}/delive',[branchController::class, 'oneMyTransfer'])->name('oneMyTransfer');
     Route::get('/transfered/my/{id}/delete',[branchController::class, 'oneMyTransferDelete'])->name('oneMyTransferDelete');
-    
+    Route::get('/addnewtransfer/my',[branchController::class, 'addnewtransfer'])->name('addnewtransfer');
+
     Route::get('/transferoursend/{id}',[branchController::class, 'toexceltransfer'])->name('toexceltransfer');
     Route::get('/transfer/our/{column?}',[branchController::class, 'ourTransfers'])->name('ourTransfers');
     Route::post('/transfered/our/{id}/get',[branchController::class, 'oneOurTransfer'])->name('oneOurTransfer');

@@ -46,8 +46,11 @@ Route::middleware(['sparepartmanager','auth'])->group(function(){
     Route::get('/sparepartmanager', function () {
         return view('sparepartmanager');
     })->middleware(['auth'])->name('sparepartmanager');
-    Route::get('/sparepartmanager/transfer/{column}/{sort}',[sparepartmanagerController::class, 'allTransfers'])->name('allTransfers');
-    Route::post('/sparepartmanager/transfered',[sparepartmanagerController::class, 'transfered'])->name('transfered');
+    Route::get('/sparepartmanager/transfer/',[sparepartmanagerController::class, 'allTransfers'])->name('allTransfers');
+    Route::get('/sparepartmanager/transfered',[sparepartmanagerController::class, 'transfered'])->name('transfered');
+    Route::get('/sparepartmanager/changecode',[sparepartmanagerController::class, 'changetonewcode'])->name('changetonewcode');
+    Route::get('/sparepartmanager/changed',[sparepartmanagerController::class, 'changedall'])->name('changedall');
+    Route::get('/sparepartmanager/onmayway',[sparepartmanagerController::class, 'onmayway'])->name('onmayway');
 
     
 });

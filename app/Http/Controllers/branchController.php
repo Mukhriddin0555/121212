@@ -300,6 +300,12 @@ class branchController extends Controller
         return redirect()->route('ourTransfers', ['updated_at']);
     }
     //создание новой заявки на трансфер и сообшение для юсера
+    public function addnewtransfer(){
+        $sklad_id = User::find(Auth::User()->id)->sklad->id;
+        $branchs = warehouse::where('id', '!=', $sklad_id)->get();
+        $count = $this->countmetod();
+        return view('zavsklad.ordertransfer', ['branchs' => $branchs, 'count' => $count]);
+    }
     public function newtransfer(Request $req)
     {   
         $req->validate([
@@ -333,7 +339,7 @@ class branchController extends Controller
             $mail->save();
             //"Здраствуйте. Прошу вас отправить с ближайщим рейсом $sparepart->sap_kod $sparepart->name $req->how шт на филиал $warehouse->Kod - $warehouse->name . с уважением $user->surname $user->lastname"
         }
-        return redirect()->route('myTransfers', ['updated_at']);
+        return redirect()->route('myTransfers', ['updated_at'])->with('thisok', 'Ваш заказ успешно добавлен');
     }
     //мульти изменения статуса ожидания на доставлен 
     public function selecteddelivered(Request $req, $routename = 'allWait'){

@@ -12,8 +12,28 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('allTransfers', ['sap_kod', 'asc'])" :active="request()->routeIs('sparepartmanager')">
+                    <x-nav-link :href="route('allTransfers',)" :active="request()->routeIs('allTransfers')">
                         {{ __('Заявки на трансфер') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('transfered')" :active="request()->routeIs('transfered')">
+                        {{ __('Трансфер: История') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('changetonewcode')" :active="request()->routeIs('changetonewcode')">
+                        {{ __('Пересорт') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('changedall')" :active="request()->routeIs('changedall')">
+                        {{ __('Пересорт: История') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('onmayway')" :active="request()->routeIs('onmayway')">
+                        {{ __('Отправлено') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -73,7 +93,11 @@
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->surname }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                <div class="font-medium text-sm text-gray-500"><a href="{{route('allTransfers', ['sap_kod', 'asc'])}}">Мои заявки на продажу</a></div>
+                <div class="font-medium text-sm text-gray-500"><a href="{{route('allTransfers')}}">Трансфер</a></div>
+                <div class="font-medium text-sm text-gray-500"><a href="{{route('transfered')}}">Истоиря Трансфера</a></div>
+                <div class="font-medium text-sm text-gray-500"><a href="{{route('changetonewcode')}}">Пересорт</a></div>
+                <div class="font-medium text-sm text-gray-500"><a href="{{route('changedall')}}">История пересорта</a></div>
+                <div class="font-medium text-sm text-gray-500"><a href="{{route('onmayway')}}">Отправлено</a></div>
             </div>
 
             <div class="mt-3 space-y-1">
