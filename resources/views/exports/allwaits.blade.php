@@ -21,7 +21,7 @@
         <tr>
             
             @if (strlen($wait->crm_id) == 11)
-            <td>'0{{ $wait->crm_id }}</td>
+            <td>0{{ $wait->crm_id }}</td>
             @else
             <td>{{ $wait->crm_id }}</td>
             @endif            

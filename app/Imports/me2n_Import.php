@@ -32,27 +32,25 @@ class me2n_Import implements ToModel
                 ->count();
                 $order = DB::table('waitings')
                 ->where('status_id', 1)
-                ->where('crm_id', strval($rows[0]))
+                ->where('crm_id', $rows[0])
                 ->where('sparepart_id', $sap_id)
                 ->where('active', 1)
                 ->first();
     
                     
                     
-                if($order && $order->how <= $rows[2]){
-                
-                $order = DB::table('waitings')
-                ->where('status_id', 1)
-                ->where('crm_id', strval($rows[0]))
-                ->where('sparepart_id', $sap_id)
-                ->where('how', $rows[2])
-                ->update(["status_id" => 3]);
-
-                $me2ncreate = new me2nImport();
-                $me2ncreate->sap = $rows[1];
-                $me2ncreate->postupleniye = $rows[4];
-                $me2ncreate->prihod = $rows[5];
-                $me2ncreate->save();
+                if ($order && $order->how <= $rows[2]) {
+                    $order = DB::table('waitings')
+                    ->where('status_id', 1)
+                    ->where('crm_id', $rows[0])
+                    ->where('sparepart_id', $sap_id)
+                    ->where('how', $rows[2])
+                    ->update(["status_id" => 3]);
+                    $me2ncreate = new me2nImport();
+                    $me2ncreate->sap = $rows[1];
+                    $me2ncreate->postupleniye = $rows[4];
+                    $me2ncreate->prihod = $rows[5];
+                    $me2ncreate->save();
                 
                 }
                 if($me2n == 0){
@@ -90,7 +88,7 @@ class me2n_Import implements ToModel
                     
                 }
                     
-            }
-        }
-    }
+            } // им 2чи уровень
+        }// иф 1 уровень
+    }//функция конец
 }

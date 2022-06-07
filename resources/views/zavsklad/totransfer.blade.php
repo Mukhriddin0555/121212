@@ -26,7 +26,7 @@
                                     {{$item->updated_at}}
                                 </td>
                                 <td class="p-2 pr-3 text-xs">
-                                    @if ($item->answer_id == 7)
+                                    @if ($item->answer_id == 8 || $item->answer_id == 7)
                                         <a href="{{route('toexceltransfer', [$item->id])}}" class="text-blue-500">{{$item->sparepart->sap_kod}}</a>
                                     @else
                                     {{$item->sparepart->sap_kod}}

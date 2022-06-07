@@ -19,10 +19,10 @@
     </thead>
     <tbody>
     <tr>
-        <td>Сап код</td>    <td>Наименование</td>   <td>Ед. Изм</td>    <td>Кол-во</td> <td>Примечание</td>
+        <td>Сап код</td>    <td>Наименование</td>   <td>Ед. Изм</td>    <td>Кол-во</td> <td>CRM ID</td>
     </tr>
     <tr>
-        <td>{{$transfer->sparepartname->sap_kod}}</td>  <td>{{$transfer->sparepartname->name}}</td>  <td>шт</td> <td>{{$transfer->how}}</td> <td>{{$transfer->transferinfo->text}}</td>
+        <td>{{$transfer->sparepartname->sap_kod}}</td>  <td>{{$transfer->sparepartname->name}}</td>  <td>шт</td> <td>{{$transfer->how}}</td> <td> ID: {{$transfer->transferinfo->crm_id}}</td>
     </tr>
     <tr></tr>
     <tr>

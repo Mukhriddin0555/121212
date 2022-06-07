@@ -149,7 +149,7 @@ class branchController extends Controller
         $date = $this->findDate($req->crm_id);  
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
         $wait = new waiting();
-        $wait->crm_id = strval($req->crm_id);
+        $wait->crm_id = $req->crm_id;
         $wait->sparepart_id = $sparepart_id->id;
         $wait->how = $req->how;
         $wait->warehouse_id = $sklad_id;
@@ -275,16 +275,7 @@ class branchController extends Controller
         $transfer->answer_id = $req->answer;
         $transfer->text = $req->info;
         $transfer->save();
-        if($transfer->answer_id == 7){
-            $user_id = warehouse::where('id', $transfer->from_user_id)->with('user')->first()->user->id;
-            $mail = new MailArtel();
-            $mail->user_id = $user_id;
-            $mail->from_user_id = Auth::user()->id;
-            $mail->topic = "Подтверждение отправки";
-            $mail->transfer_id = $transfer->id;
-            $mail->text = $transfer->text;
-            $mail->form = 1;
-            $mail->save();
+        if($transfer->answer_id == 8){
             $count = warehouse::find($transfer->to_user_id)->increment('orderinc');
             $count = warehouse::find($transfer->to_user_id);
             $spare_transfer = new SpareTransfer();
@@ -297,6 +288,19 @@ class branchController extends Controller
             $spare_transfer->count = $count->orderinc;
             $spare_transfer->save();
         }
+        if($transfer->answer_id == 7){
+            $user_id = warehouse::where('id', $transfer->from_user_id)->with('user')->first()->user->id;
+            $mail = new MailArtel();
+            $mail->user_id = $user_id;
+            $mail->from_user_id = Auth::user()->id;
+            $mail->topic = "Подтверждение отправки";
+            $mail->transfer_id = $transfer->id;
+            $mail->text = $transfer->text;
+            $mail->form = 1;
+            $mail->save();
+            $waited = waiting::where('crm_id', $transfer->crm_id)->first();
+            if($waited){$waited->status_id = 3; $waited->save();}
+        }
         return redirect()->route('ourTransfers', ['updated_at']);
     }
     //создание новой заявки на трансфер и сообшение для юсера
@@ -305,17 +309,17 @@ class branchController extends Controller
         $req->validate([
             'sparepart_id' => ['required'],
             'how' => ['required'],
-            'text' => ['required'],
+            'crm_id' => ['required'],
             'tosklad' => ['required'],
         ]);  
         $sparepart = sparepart::firstOrCreate(['sap_kod' => $req->sparepart_id],['name' => 'Не найден']);
         $sklad_id = User::find(Auth::User()->id)->sklad->id;
         //$user = User::find(Auth::User()->id);
         $transfer = new transfer();
-
         $transfer->sparepart_id = $sparepart->id;
         $transfer->how = $req->how;
-        $transfer->text = $req->text;
+        $transfer->crm_id = $req->crm_id;
+        $transfer->text = 'ID: ' . $req->crm_id . ' учун';
         $transfer->from_user_id = $sklad_id;
         $transfer->to_user_id = $req->tosklad;
         $transfer->answer_id = 1;
@@ -373,11 +377,7 @@ class branchController extends Controller
             $count = $this->countmetod();
             return view('zavsklad', ['data1' => $data1, 'count' => $count]);
             
-        }
-        if($data == 0){
-            return redirect()->route('zavsklad')->with('errorid', 'В базе данных не найдено совпадений по записи:' . $search1);
-            
-        }
+        }else{return redirect()->route('zavsklad')->with('errorid', 'В базе данных не найдено совпадений по записи:' . $search1);}
     }
     public function allmailincoming($column = 'active'){
         $user_id = Auth::User()->id;

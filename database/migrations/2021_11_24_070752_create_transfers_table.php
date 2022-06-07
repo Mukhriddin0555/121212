@@ -22,6 +22,7 @@ class CreateTransfersTable extends Migration
             $table->integer('to_user_id');
             $table->integer('answer_id');
             $table->text('text')->nullable();
+            $table->bigInteger('crm_id')->default(0);
             $table->timestamps();
         });
     }

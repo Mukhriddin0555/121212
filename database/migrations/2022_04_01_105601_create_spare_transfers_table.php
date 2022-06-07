@@ -22,6 +22,9 @@ class CreateSpareTransfersTable extends Migration
             $table->integer('order_number');
             $table->integer('active')->default(1);
             $table->timestamps();
+            $table->foreignIdFor(transfer::class);
+            $table->foreignIdFor(sparepart::class);
+            $table->bigInteger('count');
         });
     }
 

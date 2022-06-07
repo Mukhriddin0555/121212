@@ -19,7 +19,7 @@ class CreateWaitingsTable extends Migration
         Schema::create('waitings', function (Blueprint $table) {
             $table->id();
             $table->date('data');
-            $table->string('crm_id');
+            $table->bigInteger('crm_id');
             $table->foreignIdFor(sparepart::class);
             $table->integer('how');
             $table->string('order');
