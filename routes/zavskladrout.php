@@ -39,6 +39,7 @@ Route::middleware(['branchmanager','auth'])->group(function(){
     //----------------------------------------------------------------------------------------------------------
     //Трансфер учун
     Route::get('/transfer/my/{column?}',[branchController::class, 'myTransfers'])->name('myTransfers');
+    Route::get('/transfer/allhistory/{column?}',[branchController::class, 'historyTransfers'])->name('historyTransfers');
     Route::get('/transfered/my/{id}/delive',[branchController::class, 'oneMyTransfer'])->name('oneMyTransfer');
     Route::get('/transfered/my/{id}/delete',[branchController::class, 'oneMyTransferDelete'])->name('oneMyTransferDelete');
     

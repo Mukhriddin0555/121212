@@ -1382,11 +1382,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Отменен'
         ]);
         DB::table('answaers')->insert([
-            'id' => 7,
+            'id' => 8,
             'name' => 'Отправлен'
         ]);
         DB::table('answaers')->insert([
-            'id' => 8,
+            'id' => 7,
             'name' => 'Готово к отправке'
         ]);
         DB::table('statuses')->insert([

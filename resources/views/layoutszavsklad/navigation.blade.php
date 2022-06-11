@@ -140,7 +140,7 @@
                         </li>
                         <li class="my-px">
                           <a
-                            href="{{route('myTransfers', 'answer_id')}}"
+                            href="{{route('historyTransfers', 'answer_id')}}"
                             class="flex flex-row items-center h-10 px-3 rounded-lg text-gray-300 hover:bg-gray-100 hover:text-gray-700"
                           >
                           <img src="{{asset('storage/history_icon.png')}}"  alt="hist" class="w-6 h-6">

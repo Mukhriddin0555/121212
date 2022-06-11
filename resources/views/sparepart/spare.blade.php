@@ -63,23 +63,7 @@
             </div>
           </div>
           <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
-        </form>
-      </div>
-      <div class="flex justify-center w-1/2 border-2 rounded p-4 m-2">
-        <form class="w-full max-w-lg" action="{{ route('modelImport')}}" method="post" enctype="multipart/form-data">
-          @csrf
-          <div><h6>Добавить Модели</h6></div>
-          <br>
-          <div class="flex flex-wrap -mx-3 mb-6">
-            <div class="w-full px-3">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
-                Модельларни импорт килиш
-              </label>
-              <input name="modelimport" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
-              <p class="text-gray-600 text-xs italic">куйидаги форматда киритилсин(.xlsx)</p>
-            </div>
-          </div>
-          <button type="submit" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Сохранить</button>
+          <a href="{{route('allExport')}}" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Export</a>
         </form>
       </div>
       <div class="flex justify-center w-1/2 border-2 rounded p-4 m-2">

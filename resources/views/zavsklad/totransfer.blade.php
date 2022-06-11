@@ -42,7 +42,7 @@
                                 <td class="p-2 pr-3 text-xs">
                                     {{$item->fromtransfer->name}}
                                 </td>
-                                @if ($item->answer_id == 2 || $item->answer_id == 7)
+                                @if ($item->answer_id == 2 || $item->answer_id == 8)
                                 <td class="p-2 pr-3 text-xs">
                                     {{ $item->allanswaer->name}}
                                 </td>
@@ -58,6 +58,12 @@
                                                 <option class="text-xs" value="{{ $item->allanswaer->id}}" selected="selected">{{ $item->allanswaer->name}}</option>
                                                 @foreach ($data2 as $status)
                                                     @if ($status->id == 2 || $status->id == 1 || $status->id == $item->allanswaer->id )
+                                                        @continue
+                                                    @endif
+                                                    @if ($status->id == 8 && $item->allanswaer->id < 7 )
+                                                        @continue
+                                                    @endif
+                                                    @if ($status->id == 6 && $item->allanswaer->id == 7 )
                                                         @continue
                                                     @endif
                                                     <option class="text-xs" value="{{ $status->id}}">{{ $status->name}}</option>

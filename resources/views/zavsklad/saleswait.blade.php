@@ -51,10 +51,11 @@
                                     <td class="p-2 pr-3">
                                     </td>
                                     @endif
-                                
+                                @if ($item->status_id == 1)
                                 <th class="p-2 pr-3">
                                     <a href="{{ route('deliveredOneWaitOrder', $item->id)}}" title="Доставлено"><img src="{{asset('storage/dostavlen.png')}}"  alt="Доставлен" class="w-4 h-4"></a>
                                 </th>
+                                @endif
                                 <th class="p-2 pr-3">
                                     <a href="{{ route('deleteOneWaitOrder', $item->id)}}" title="Удалить"><img src="{{asset('storage/delete_icon.png')}}"  alt="Удалить" class="w-4 h-4"></a>
                                 </th>

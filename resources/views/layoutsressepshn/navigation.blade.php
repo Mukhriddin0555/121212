@@ -173,7 +173,6 @@
                 <a href="#" class="flex flex-row items-center">
     
                   <span class="flex flex-col ml-2 hidden lg:flex  ">
-                    <span class="truncate w-30 font-semibold tracking-wide leading-none">{{ Auth::findrole() }}</span>
                     <span class="truncate w-30 text-gray-500 text-xs leading-none mt-1">{{ Auth::user()->surname }} {{ Auth::user()->lastname }}</span>
                   </span>
                 </a>

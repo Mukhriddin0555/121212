@@ -110,7 +110,7 @@
                                 <td class="p-2 pr-3 text-xs">
                                     {{$item->text}}
                                 </td>
-                                @if ($item->answer_id == 7)
+                                @if ($item->answer_id == 8)
                                 <td class="p-1 pr-1">
                                     <x-link.delivered deld="{{ route('oneMyTransfer', [$item->id])}}" />
                                 </td>

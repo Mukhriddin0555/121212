@@ -22,16 +22,6 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
-                    <x-nav-link :href="route('allStatus')" :active="request()->routeIs('status')">
-                        {{ __('Статусы') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
-                    <x-nav-link :href="route('allCallBack')" :active="request()->routeIs('asnwaer')">
-                        {{ __('Ответы') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-2 sm:flex">
                     <x-nav-link :href="route('sparePart')" :active="request()->routeIs('sparePart')">
                         {{ __('Запчасти') }}
                     </x-nav-link>
@@ -95,8 +85,6 @@
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                 <div class="font-medium text-sm text-gray-500"><a href="{{route('allUsers', ['surname', 'asc'])}}">Пользователи</a></div>
                 <div class="font-medium text-sm text-gray-500"><a href="{{route('allBranchs',['kod', 'asc'])}}">Регионы</a></div>
-                <div class="font-medium text-sm text-gray-500"><a href="{{route('allStatus')}}">Статусы</a></div>
-                <div class="font-medium text-sm text-gray-500"><a href="{{route('allCallBack')}}">Ответы</a></div>
                 <div class="font-medium text-sm text-gray-500"><a href="{{route('sparePart')}}">Запчасти</a></div>
             </div>
 
