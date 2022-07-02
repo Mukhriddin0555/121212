@@ -96,7 +96,6 @@
                 <button form="selectedopt" formaction="{{ route('selecteddelivered', 'allWait')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Доставлен</button>
                 <button form="selectedopt"  formaction="{{ route('selecteddelete', 'allWait')}}" type="submit" formmethod="get" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 ">Удалить</button>
                 <button title="Экспортировать в книгу экзель" class="bg-green-200 rounded m-3 p-3 hover:bg-green-400 "><a href="{{ route('allWaitExport')}}">Экспорт в Excel</a></button>
-                
                 <br>
             </div>
         </div>
